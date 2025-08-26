@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is AuthSuccess) {
               final user = state.user;
               final cubit = context.read<AuthCubit>();
+
               final status = await cubit.checkProfileCompletionByEmail(user.email!);
 
               if (status == "incomplete") {
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   context,
                   MaterialPageRoute(builder: (_) => const ProfileScreen()),
                 );
-              } else if (status == "complete") {
+              } else if (status == "approved") {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => const HomeScreen()),

@@ -91,7 +91,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
 
     // رجع status إذا البيانات كاملة
-    return data['status'] ?? "pending"; // الافتراضي pending
+    return data['hrStatus'] ?? "pending"; // الافتراضي pending
   }
 
 

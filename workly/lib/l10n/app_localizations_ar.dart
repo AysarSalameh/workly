@@ -225,4 +225,65 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorSelectBirth => 'يرجى اختيار تاريخ الميلاد';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get loading => 'جاري التحميل...';
+
+  @override
+  String get checkIn => 'تسجيل دخول';
+
+  @override
+  String get checkOut => 'تسجيل خروج';
+
+  @override
+  String get totalHours => 'عدد الساعات';
+
+  @override
+  String get hours => 'ساعة';
+
+  @override
+  String get withinCompany => 'داخل نطاق الشركة ✅';
+
+  @override
+  String get outsideCompany => 'خارج نطاق الشركة ❌';
+
+  @override
+  String get noData => 'ما في بيانات';
+
+  @override
+  String get todayAttendance => 'سجل الحضور اليوم';
+
+  @override
+  String get employee => 'موظف';
+
+  @override
+  String get warningNearCompany =>
+      'تنبيه: يجب أن تكون بالقرب من الشركة لتسجيل الحضور.';
+
+  @override
+  String get dashboard => 'لوحة التحكم';
+
+  @override
+  String get attendanceHistory => 'تاريخ الحضور';
+
+  @override
+  String get monthlySchedule => 'الجدول الشهري';
+
+  @override
+  String get myRequests => 'طلباتي';
+
+  @override
+  String get notifications => 'الإشعارات';
+
+  @override
+  String get help => 'المساعدة والدعم';
+
+  @override
+  String get logoutConfirm => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get cancel => 'إلغاء';
 }

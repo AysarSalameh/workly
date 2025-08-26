@@ -517,6 +517,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select your birth date'**
   String get errorSelectBirth;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @checkIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in'**
+  String get checkIn;
+
+  /// No description provided for @checkOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-out'**
+  String get checkOut;
+
+  /// No description provided for @totalHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Total hours'**
+  String get totalHours;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'hours'**
+  String get hours;
+
+  /// No description provided for @withinCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Within Company ✅'**
+  String get withinCompany;
+
+  /// No description provided for @outsideCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside Company ❌'**
+  String get outsideCompany;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available'**
+  String get noData;
+
+  /// No description provided for @todayAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Attendance'**
+  String get todayAttendance;
+
+  /// No description provided for @employee.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee'**
+  String get employee;
+
+  /// No description provided for @warningNearCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: You must be near the company to check in.'**
+  String get warningNearCompany;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @attendanceHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance History'**
+  String get attendanceHistory;
+
+  /// No description provided for @monthlySchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Schedule'**
+  String get monthlySchedule;
+
+  /// No description provided for @myRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'My Requests'**
+  String get myRequests;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get help;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate

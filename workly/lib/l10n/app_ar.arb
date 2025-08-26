@@ -68,7 +68,30 @@
   "rejectedTitle": "تم رفض طلبك",
   "rejectedMessage": "لسوء الحظ، تم رفض طلبك من قبل المسؤول. يرجى مراجعة معلوماتك أو الاتصال بالدعم.",
   "logout": "تسجيل الخروج",
-  "errorSelectBirth": "يرجى اختيار تاريخ الميلاد"
+  "errorSelectBirth": "يرجى اختيار تاريخ الميلاد",
+  "home": "الرئيسية",
+  "loading": "جاري التحميل...",
+  "checkIn": "تسجيل دخول",
+  "checkOut": "تسجيل خروج",
+  "totalHours": "عدد الساعات",
+  "todayAttendance": "سجل الحضور اليوم",
+  "noData": "ما في بيانات",
+  "hours": "ساعة",
+  "withinCompany": "داخل نطاق الشركة ✅",
+  "outsideCompany": "خارج نطاق الشركة ❌",
+  "employee": "موظف",
+  "warningNearCompany": "تنبيه: يجب أن تكون بالقرب من الشركة لتسجيل الحضور.",
+  "dashboard": "لوحة التحكم",
+  "attendanceHistory": "تاريخ الحضور",
+  "monthlySchedule": "الجدول الشهري",
+  "myRequests": "طلباتي",
+  "notifications": "الإشعارات",
+  "help": "المساعدة والدعم",
+  "logoutConfirm": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
+  "cancel": "إلغاء"
+
+
+
 
 
 }

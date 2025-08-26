@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects_flutter/data_profile/profile_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:projects_flutter/data_profile/profile_cubit.dart';
+import 'package:projects_flutter/screens/pendingscreen.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
-import 'package:projects_flutter/screens/pendingscreen.dart';
+import 'package:projects_flutter/widgets/buildDateField.dart';
+import 'package:projects_flutter/widgets/buildTextField.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -191,22 +193,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 30),
 
                   // Form Fields
-                  _buildTextField(controller: nameController, label: loc.name, icon: Icons.person),
+                  buildTextField(controller: nameController, label: loc.name, icon: Icons.person),
                   const SizedBox(height: 16),
-                  _buildTextField(controller: emailController, label: loc.email, icon: Icons.email, enabled: false),
+                  buildTextField(controller: emailController, label: loc.email, icon: Icons.email, enabled: false),
                   const SizedBox(height: 16),
-                  _buildDateField(context),
+                  buildDateField(context: context, controller: birthController,),
                   const SizedBox(height: 16),
-                  _buildTextField(controller: phoneController, label: loc.phoneNumber, icon: Icons.phone),
+                  buildTextField(controller: phoneController, label: loc.phoneNumber, icon: Icons.phone),
                   const SizedBox(height: 16),
-                  _buildTextField(controller: idNumberController, label: loc.idNumber, icon: Icons.perm_identity),
+                  buildTextField(controller: idNumberController, label: loc.idNumber, icon: Icons.perm_identity),
                   const SizedBox(height: 16),
-                  _buildTextField(controller: companyCodeController, label: loc.companyCode, icon: Icons.business),
+                  buildTextField(controller: companyCodeController, label: loc.companyCode, icon: Icons.business),
                   const SizedBox(height: 16),
-                  _buildTextField(controller: addressController, label: loc.address, icon: Icons.location_on, maxLines: 2),
+                  buildTextField(controller: addressController, label: loc.address, icon: Icons.location_on, maxLines: 2),
                   const SizedBox(height: 16),
-                  _buildTextField(controller: ibanController, label: loc.iban, icon: Icons.account_balance),
-                  const SizedBox(height: 40),
+                  buildTextField(controller: ibanController, label: loc.iban, icon: Icons.account_balance),
+                  const SizedBox(height: 16),
+
+                  // زر لتحديد موقع الشركة من GPS
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        cubit.pickCompanyLocation();
+                      },
+                      icon: const Icon(Icons.gps_fixed),
+                      label: const Text("Use GPS for company location"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
                   // Save Button
                   SizedBox(
@@ -226,21 +248,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           return;
                         }
 
-                        if (_validateForm()) {
-                          cubit.saveProfile(
-                            name: nameController.text.trim(),
-                            email: userEmail,
-                            birthDate: birthController.text.trim(),
-                            phoneNumer: phoneController.text.trim(),
-                            Id: idNumberController.text.trim(),
-                            companyCode: companyCodeController.text.trim(),
-                            address: addressController.text.trim(),
-                            iban: ibanController.text.trim(),
-                          );
-                        }
+                        cubit.saveProfile(
+                          name: nameController.text.trim(),
+                          email: userEmail,
+                          birthDate: birthController.text.trim(),
+                          phoneNumer: phoneController.text.trim(),
+                          Id: idNumberController.text.trim(),
+                          companyCode: companyCodeController.text.trim(),
+                          address: addressController.text.trim(),
+                          iban: ibanController.text.trim(),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -259,105 +279,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool enabled = true,
-    int maxLines = 1,
-  }) {
-    return TextField(
-      controller: controller,
-      enabled: enabled,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[400]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateField(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-    return TextField(
-      controller: birthController,
-      readOnly: true,
-      decoration: InputDecoration(
-        labelText: loc.birthDate,
-        prefixIcon: const Icon(Icons.cake, color: Colors.pinkAccent),
-        suffixIcon: const Icon(Icons.calendar_today),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[400]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blue, width: 2),
-        ),
-      ),
-      onTap: () {
-        DatePicker.showDatePicker(
-          context,
-          showTitleActions: true,
-          minTime: DateTime(1900, 1, 1),
-          maxTime: DateTime.now(),
-          onChanged: (date) {},
-          onConfirm: (date) {
-            birthController.text =
-            "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
-          },
-          currentTime: DateTime.now().subtract(const Duration(days: 365 * 25)),
-          locale: LocaleType.en,
-        );
-      },
-    );
-  }
-
-  bool _validateForm() {
-    final loc = AppLocalizations.of(context)!;
-    if (nameController.text.trim().isEmpty) {
-      _showErrorSnackBar(loc.errorEnterName);
-      return false;
-    }
-    if (birthController.text.trim().isEmpty) {
-      _showErrorSnackBar(loc.errorSelectBirth);
-      return false;
-    }
-    if (phoneController.text.trim().isEmpty) {
-      _showErrorSnackBar("Please enter your phone number.");
-      return false;
-    }
-    if (idNumberController.text.trim().isEmpty) {
-      _showErrorSnackBar("Please enter your ID number.");
-      return false;
-    }
-    if (companyCodeController.text.trim().isEmpty) {
-      _showErrorSnackBar(loc.errorEnterCode);
-      return false;
-    }
-    return true;
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 }

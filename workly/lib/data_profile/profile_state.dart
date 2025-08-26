@@ -23,6 +23,12 @@ class IdImagePicked extends ProfileState {
   final File image;
   IdImagePicked(this.image);
 }
+class CompanyLocationPicked extends ProfileState {
+  final double latitude;
+  final double longitude;
+
+  CompanyLocationPicked(this.latitude, this.longitude);
+}
 class ProfileUploadProgress extends ProfileState {
   final double progress;
   final bool isProfile; // true: profile image, false: id image

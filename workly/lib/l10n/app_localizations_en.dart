@@ -224,4 +224,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorSelectBirth => 'Please select your birth date';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get checkIn => 'Check-in';
+
+  @override
+  String get checkOut => 'Check-out';
+
+  @override
+  String get totalHours => 'Total hours';
+
+  @override
+  String get hours => 'hours';
+
+  @override
+  String get withinCompany => 'Within Company ✅';
+
+  @override
+  String get outsideCompany => 'Outside Company ❌';
+
+  @override
+  String get noData => 'No data available';
+
+  @override
+  String get todayAttendance => 'Today\'s Attendance';
+
+  @override
+  String get employee => 'Employee';
+
+  @override
+  String get warningNearCompany =>
+      'Warning: You must be near the company to check in.';
+
+  @override
+  String get dashboard => 'Dashboard';
+
+  @override
+  String get attendanceHistory => 'Attendance History';
+
+  @override
+  String get monthlySchedule => 'Monthly Schedule';
+
+  @override
+  String get myRequests => 'My Requests';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get help => 'Help & Support';
+
+  @override
+  String get logoutConfirm => 'Are you sure you want to logout?';
+
+  @override
+  String get cancel => 'Cancel';
 }
