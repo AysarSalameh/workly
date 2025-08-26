@@ -225,4 +225,326 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorSelectBirth => 'يرجى اختيار تاريخ الميلاد';
+
+  @override
+  String get home => 'وركلي 🌞';
+
+  @override
+  String get loading => 'جاري التحميل...';
+
+  @override
+  String get checkIn => 'تسجيل دخول';
+
+  @override
+  String get checkOut => 'تسجيل خروج';
+
+  @override
+  String get totalHours => 'عدد الساعات';
+
+  @override
+  String get hours => 'ساعة';
+
+  @override
+  String get withinCompany => 'داخل نطاق الشركة ✅';
+
+  @override
+  String get outsideCompany => 'خارج نطاق الشركة ❌';
+
+  @override
+  String get noData => 'ما في بيانات';
+
+  @override
+  String get todayAttendance => 'سجل الحضور اليوم';
+
+  @override
+  String get employee => 'موظف';
+
+  @override
+  String get warningNearCompany =>
+      'تنبيه: يجب أن تكون بالقرب من الشركة لتسجيل الحضور.';
+
+  @override
+  String get dashboard => 'لوحة التحكم';
+
+  @override
+  String get attendanceHistory => 'تاريخ الحضور';
+
+  @override
+  String get monthlySchedule => 'الجدول الشهري';
+
+  @override
+  String get myRequests => 'طلباتي';
+
+  @override
+  String get notifications => 'الإشعارات';
+
+  @override
+  String get help => 'المساعدة والدعم';
+
+  @override
+  String get logoutConfirm => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get customization => 'التخصيص';
+
+  @override
+  String get changeAppLanguage => 'تغيير لغة التطبيق';
+
+  @override
+  String get darkMode => 'الوضع الليلي';
+
+  @override
+  String get enableDisableDarkMode => 'تفعيل/تعطيل الوضع الليلي';
+
+  @override
+  String get notificationsAndSecurity => 'الإشعارات والأمان';
+
+  @override
+  String get manageNotifications => 'إدارة الإشعارات';
+
+  @override
+  String get chooseLanguage => 'اختر اللغة';
+
+  @override
+  String version(Object version) {
+    return 'الإصدار $version';
+  }
+
+  @override
+  String get helpAndSupport => 'المساعدة والدعم';
+
+  @override
+  String get frequentlyAskedQuestions => 'الأسئلة المتكررة';
+
+  @override
+  String get howToUseApp => 'كيف أستخدم التطبيق؟';
+
+  @override
+  String get howToUseAppAnswer =>
+      'يمكنك التنقل داخل التطبيق باستخدام شريط التنقل السفلي أو القائمة الجانبية.';
+
+  @override
+  String get isMyDataSecure => 'هل بياناتي آمنة؟';
+
+  @override
+  String get isMyDataSecureAnswer =>
+      'نعم، نحن نأخذ الخصوصية على محمل الجد ونخزن بياناتك بأمان.';
+
+  @override
+  String get contactSupport => 'تواصل مع الدعم';
+
+  @override
+  String get emailUs => 'أرسل لنا بريدًا إلكترونيًا';
+
+  @override
+  String get emailAddress => 'support@example.com';
+
+  @override
+  String get callUs => 'اتصل بنا';
+
+  @override
+  String get phoneNumbersupport => '+123 456 789';
+
+  @override
+  String get editProfile => 'تعديل الملف الشخصي';
+
+  @override
+  String get personalInfo => 'المعلومات الشخصية';
+
+  @override
+  String get profilePicture => 'الصورة الشخصية';
+
+  @override
+  String get monthlyScheduleTitle => 'جدولك الشهري';
+
+  @override
+  String get noEvents => 'لا توجد أحداث لهذا اليوم';
+
+  @override
+  String get eventDetails => 'تفاصيل الفعالية';
+
+  @override
+  String get date => 'التاريخ';
+
+  @override
+  String get time => 'الوقت';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get error => 'حدث خطأ';
+
+  @override
+  String get addEvent => 'إضافة حدث';
+
+  @override
+  String get eventText => 'نص الحدث';
+
+  @override
+  String get eventReminder => 'تذكير';
+
+  @override
+  String get eventTime => 'وقت الحدث';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get loginToViewRecords => 'يرجى تسجيل الدخول لعرض السجلات';
+
+  @override
+  String get noDataForMonth => 'لا توجد سجلات في هذا الشهر';
+
+  @override
+  String get filterByMonth => 'فلترة حسب الشهر:';
+
+  @override
+  String get minutes => 'دقائق';
+
+  @override
+  String get monday => 'الإثنين';
+
+  @override
+  String get tuesday => 'الثلاثاء';
+
+  @override
+  String get wednesday => 'الأربعاء';
+
+  @override
+  String get thursday => 'الخميس';
+
+  @override
+  String get friday => 'الجمعة';
+
+  @override
+  String get saturday => 'السبت';
+
+  @override
+  String get sunday => 'الأحد';
+
+  @override
+  String get unknownLocation => 'موقع غير معروف';
+
+  @override
+  String get locationError => 'خطأ في تحديد الموقع';
+
+  @override
+  String get duration => 'المدة';
+
+  @override
+  String get errorOccurred => 'حدث خطأ';
+
+  @override
+  String get pleaseLoginToViewRecords => 'يرجى تسجيل الدخول لعرض السجلات';
+
+  @override
+  String get noRecordsInThisMonth => 'لا توجد سجلات في هذا الشهر';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get january => 'يناير';
+
+  @override
+  String get february => 'فبراير';
+
+  @override
+  String get march => 'مارس';
+
+  @override
+  String get april => 'أبريل';
+
+  @override
+  String get may => 'مايو';
+
+  @override
+  String get june => 'يونيو';
+
+  @override
+  String get july => 'يوليو';
+
+  @override
+  String get august => 'أغسطس';
+
+  @override
+  String get september => 'سبتمبر';
+
+  @override
+  String get october => 'أكتوبر';
+
+  @override
+  String get november => 'نوفمبر';
+
+  @override
+  String get december => 'ديسمبر';
+
+  @override
+  String get totalWorkHours => 'إجمالي ساعات العمل';
+
+  @override
+  String get notCheckedOutYet => 'لم ينصرف بعد';
+
+  @override
+  String get noLocation => 'لا يوجد موقع مسجل';
+
+  @override
+  String get locating => 'جاري تحديد الموقع...';
+
+  @override
+  String get workDayDetails => 'تفاصيل يوم العمل';
+
+  @override
+  String get completed => 'مكتمل';
+
+  @override
+  String get active => 'نشط';
+
+  @override
+  String get tapForDetails => 'اضغط لعرض التفاصيل';
+
+  @override
+  String get allFieldsRequired => 'يجب ملء جميع الحقول';
+
+  @override
+  String get fillAllRequiredFields => 'يرجى ملء جميع الحقول المطلوبة';
+
+  @override
+  String get failedToLoadUser => 'فشل في تحميل بيانات المستخدم';
+
+  @override
+  String get failedToSaveProfile => 'فشل في حفظ الملف الشخصي';
+
+  @override
+  String get camera => 'الكاميرا';
+
+  @override
+  String get gallery => 'المعرض';
+
+  @override
+  String get locationServicesDisabled => 'خدمات الموقع معطلة';
+
+  @override
+  String get locationPermissionDenied => 'تم رفض إذن الموقع';
+
+  @override
+  String get locationPermissionDeniedForever => 'تم رفض إذن الموقع بشكل دائم';
+
+  @override
+  String get errorGettingLocation => 'خطأ أثناء الحصول على الموقع';
+
+  @override
+  String get setCompanyLocationFirst =>
+      'يرجى تحديد موقع الشركة أولاً قبل الحفظ';
+
+  @override
+  String get useGps =>
+      'استخدم نظام تحديد المواقع العالمي (GPS) لتحديد موقع الشركة';
 }

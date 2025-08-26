@@ -3,13 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:projects_flutter/Employee/ThemeCubit/themecubit.dart';
+import 'package:projects_flutter/Employee/data_profile/profile_cubit.dart';
 
-import 'package:projects_flutter/languge/cubit/language_cubit.dart';
-import 'l10n/app_localizations.dart'; // الملف يلي بيتولد تلقائياً
+import 'package:projects_flutter/Employee/languge/cubit/language_cubit.dart';
+import '/l10n/app_localizations.dart'; // الملف يلي بيتولد تلقائياً
 
-import 'auth/auth_service.dart';
-import 'auth/cubit/auth_cubit.dart';
-import 'screens/login_screen.dart';
+import '/Employee/auth/auth_service.dart';
+import '/Employee/auth/cubit/auth_cubit.dart';
+import '/Employee/screens/login_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,23 +30,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(
+          create: (context) => ProfileCubit(), // ✅ أضف هذا
+        ),
         BlocProvider(
           create: (context) => AuthCubit(AuthService()),
         ),
         BlocProvider(
           create: (context) => LanguageCubit(),
         ),
+
       ],
-      child: BlocBuilder<LanguageCubit, Locale>(
-        builder: (context, locale) {
+      child:BlocBuilder<LanguageCubit, Locale>(
+    builder: (context, locale) {
+      return BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Workly',
 
-            // 🌍 دعم اللغات
             supportedLocales: const [
-              Locale('en'), // English
-              Locale('ar'), // Arabic
+              Locale('en'),
+              Locale('ar'),
             ],
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -51,16 +60,25 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-
-            locale: locale, // ✅ يقرأ لغة التطبيق من LanguageCubit
+            locale: locale,
             theme: ThemeData(
+              brightness: Brightness.light,
               primarySwatch: Colors.blue,
-              fontFamily: 'Cairo', // ✅ يدعم العربي إذا ضفت الخط
+              fontFamily: 'Cairo',
             ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              primarySwatch: Colors.blue,
+              fontFamily: 'Cairo',
+            ),
+            themeMode: ThemeMode.system, // ✅ يقرأ الوضع الحالي من ThemeCubit
             home: const LoginScreen(),
           );
         },
-      ),
+      );
+    },
+    ),
+
     );
   }
 }

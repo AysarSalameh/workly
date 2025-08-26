@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:projects_flutter/auth/auth_service.dart';
+import 'package:projects_flutter/Employee/auth/auth_service.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -84,14 +84,14 @@ class AuthCubit extends Cubit<AuthState> {
     final isComplete = data['name'] != null &&
         data['birthDate'] != null &&
         data['Id'] != null &&
-        data['phoneNumer'] != null;
+        data['phoneNumber'] != null;
 
     if (!isComplete) {
       return "incomplete";
     }
 
     // رجع status إذا البيانات كاملة
-    return data['status'] ?? "pending"; // الافتراضي pending
+    return data['hrStatus'] ?? "pending"; // الافتراضي pending
   }
 
 

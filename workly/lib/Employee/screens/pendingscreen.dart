@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:projects_flutter/screens/login_screen.dart';
+import 'package:projects_flutter/Employee/screens/login_screen.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
 class PendingScreen extends StatelessWidget {
