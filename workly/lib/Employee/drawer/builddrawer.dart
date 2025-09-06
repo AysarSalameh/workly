@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects_flutter/Employee/auth/cubit/auth_cubit.dart';
 import 'package:projects_flutter/Employee/drawer/buildDrawerItem.dart';
 import 'package:projects_flutter/Employee/drawer/showlogoutdialog.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';

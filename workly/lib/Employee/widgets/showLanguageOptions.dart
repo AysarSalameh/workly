@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
-import 'package:projects_flutter/Employee/languge/cubit/language_cubit.dart';
 import 'package:projects_flutter/Employee/widgets/buildLanguageOption.dart';
+import 'package:projects_flutter/languge/cubit/language_cubit.dart';
 
 void showLanguageOptions(BuildContext context) {
   final loc = AppLocalizations.of(context)!;

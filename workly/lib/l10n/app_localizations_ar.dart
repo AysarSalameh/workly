@@ -162,7 +162,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get changeLanguage => 'تغيير اللغة';
 
   @override
-  String get accountCreated => 'Account created! Please verify your email.';
+  String get accountCreated =>
+      'تم إنشاء الحساب! يرجى التحقق من بريدك الإلكتروني.';
 
   @override
   String get profile => 'الملف الشخصي';
@@ -547,4 +548,55 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get useGps =>
       'استخدم نظام تحديد المواقع العالمي (GPS) لتحديد موقع الشركة';
+
+  @override
+  String get loginSuccess => 'تم تسجيل الدخول بنجاح';
+
+  @override
+  String get hrPortal => 'بوابة الموارد البشرية';
+
+  @override
+  String get hrLogin => 'تسجيل دخول الموارد البشرية';
+
+  @override
+  String get enterEmail => 'الرجاء إدخال البريد الإلكتروني';
+
+  @override
+  String get enterPassword => 'الرجاء إدخال كلمة المرور';
+
+  @override
+  String get createNewAccount => 'إنشاء حساب جديد';
+
+  @override
+  String get createAccount => 'إنشاء الحساب';
+
+  @override
+  String get joinHrTeam => 'انضم لفريق الموارد البشرية';
+
+  @override
+  String get enterFullName => 'الرجاء إدخال الاسم الكامل';
+
+  @override
+  String get enterValidEmail => 'الرجاء إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get passwordRequirements => 'كلمة المرور لا تفي بالمتطلبات';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get passwordNotMatch => 'كلمة المرور غير متطابقة';
+
+  @override
+  String get mustAcceptTerms => 'يجب الموافقة على الشروط والأحكام';
+
+  @override
+  String get termsAndPrivacy => 'أوافق على الشروط والأحكام وسياسة الخصوصية';
+
+  @override
+  String get registrationSuccess => 'Account created successfully';
+
+  @override
+  String get success => 'نجح';
 }

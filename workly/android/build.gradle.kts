@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application") version "8.9.1" apply false
-    id("com.google.gms.google-services") version "4.3.8" apply false // ✅ تعريف Google Services
+    id("com.google.gms.google-services") version "4.3.15" apply false // ✅ تعريف Google Services
 }
 
 allprojects {

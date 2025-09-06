@@ -1,13 +1,42 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:projects_flutter/Employee/auth/auth_service.dart';
+import 'package:projects_flutter/auth/auth_service.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthService _authService;
 
   AuthCubit(this._authService) : super(AuthInitial());
+
+  Future<void> loginWithGoogleWeb() async {
+    emit(AuthLoading());
+    try {
+      GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      googleProvider.addScope('email');
+      googleProvider.addScope('profile');
+
+      final userCredential = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      emit(AuthSuccess(userCredential.user!));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+  Future<void> loginWithAppleWeb() async {
+    emit(AuthLoading());
+    try {
+      OAuthProvider appleProvider = OAuthProvider("apple.com");
+      appleProvider.addScope('email');
+      appleProvider.addScope('name');
+      appleProvider.setCustomParameters({'locale': 'en'});
+
+      final userCredential = await FirebaseAuth.instance.signInWithPopup(appleProvider);
+      emit(AuthSuccess(userCredential.user!));
+    } catch (e) {
+      print(e.toString());
+      emit(AuthFailure(e.toString()));
+    }
+  }
 
   Future<void> loginWithEmail(String email, String password) async {
     emit(AuthLoading());

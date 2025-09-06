@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_flutter/Employee/MonthlySchedule/schedule_cubit.dart';
-import 'package:projects_flutter/Employee/languge/cubit/language_cubit.dart';
+import 'package:projects_flutter/languge/cubit/language_cubit.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

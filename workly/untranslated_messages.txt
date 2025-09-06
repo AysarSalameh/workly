@@ -1,5 +1,5 @@
 {
   "ar": [
-    "accountCreated"
+    "registrationSuccess"
   ]
 }

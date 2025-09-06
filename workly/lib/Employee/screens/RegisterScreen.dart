@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects_flutter/Employee/auth/cubit/auth_cubit.dart';
-import 'package:projects_flutter/Employee/auth/cubit/auth_state.dart';
+import 'package:projects_flutter/auth/cubit/auth_cubit.dart';
+import 'package:projects_flutter/auth/cubit/auth_state.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,7 +16,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  bool isValidEmail(String email) => RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
+  bool isValidEmail(String email) =>
+      RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
   bool isValidPassword(String password) => password.length >= 6;
 
   void register() {
@@ -26,21 +27,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String password = passwordController.text.trim();
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loc.pleaseFillAllFields)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.pleaseFillAllFields)));
       return;
     }
     if (!isValidEmail(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loc.pleaseEnterValidEmail)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.pleaseEnterValidEmail)));
       return;
     }
     if (!isValidPassword(password)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loc.passwordMustBe6Characters)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(loc.passwordMustBe6Characters)));
       return;
     }
 
@@ -63,14 +64,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(loc.accountCreated), backgroundColor: Colors.green),
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(
+                  loc.success,
+                  style: TextStyle(color: Colors.green.shade700),
+                ), // عنوان من loc
+                content: Text(loc.registrationSuccessful), // رسالة من loc
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // يغلق الـ AlertDialog
+                      Navigator.pop(context); // يرجع للشاشة السابقة
+                    },
+                    child: Text(loc.ok), // زر من loc
+                  ),
+                ],
+              ),
             );
-            Navigator.pop(context);
           } else if (state is AuthFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -81,12 +97,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(Icons.person_add, size: 100, color: theme.colorScheme.primary),
+                Icon(
+                  Icons.person_add,
+                  size: 100,
+                  color: theme.colorScheme.primary,
+                ),
                 const SizedBox(height: 20),
                 Text(
                   loc.registerNewAccount,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 40),
 
@@ -95,8 +117,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: nameController,
                   decoration: InputDecoration(
                     labelText: loc.fullName,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    prefixIcon: Icon(Icons.person, color: theme.iconTheme.color),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: theme.iconTheme.color,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -107,7 +134,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: loc.email,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     prefixIcon: Icon(Icons.email, color: theme.iconTheme.color),
                   ),
                 ),
@@ -119,7 +148,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: loc.password,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color),
                   ),
                 ),
@@ -138,10 +169,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     onPressed: isLoading ? null : register,
                     child: isLoading
-                        ? CircularProgressIndicator(color: theme.colorScheme.onPrimary)
-                        : Text(loc.register,
-                        style: theme.textTheme.labelLarge
-                            ?.copyWith(color: theme.colorScheme.onPrimary)),
+                        ? CircularProgressIndicator(
+                            color: theme.colorScheme.onPrimary,
+                          )
+                        : Text(
+                            loc.register,
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -149,7 +185,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 // Back to login
                 TextButton(
                   onPressed: isLoading ? null : () => Navigator.pop(context),
-                  child: Text(loc.alreadyHaveAccount, style: theme.textTheme.bodyLarge),
+                  child: Text(
+                    loc.alreadyHaveAccount,
+                    style: theme.textTheme.bodyLarge,
+                  ),
                 ),
               ],
             ),

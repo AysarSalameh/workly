@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects_flutter/Employee/auth/cubit/auth_cubit.dart';
-import 'package:projects_flutter/Employee/auth/cubit/auth_state.dart';
+import 'package:projects_flutter/auth/cubit/auth_cubit.dart';
+import 'package:projects_flutter/auth/cubit/auth_state.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
-import 'package:projects_flutter/Employee/languge/cubit/language_cubit.dart';
 import 'package:projects_flutter/Employee/screens/HomeScreen.dart';
 import 'package:projects_flutter/Employee/screens/RegisterScreen.dart';
 import 'package:projects_flutter/Employee/screens/pendingscreen.dart';
 import 'package:projects_flutter/Employee/screens/profilesetupscreen.dart';
 import 'package:projects_flutter/Employee/screens/rejectedscreen.dart';
 import 'package:projects_flutter/Employee/widgets/custom_text_field.dart';
+import 'package:projects_flutter/languge/cubit/language_cubit.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

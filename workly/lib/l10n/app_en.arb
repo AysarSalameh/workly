@@ -175,10 +175,24 @@
   "locationPermissionDeniedForever": "Location permission denied forever",
   "errorGettingLocation": "Error getting location",
   "setCompanyLocationFirst": "Please set your company location before saving",
-  "useGps": "Use GPS for company location"
-
-
-
+  "useGps": "Use GPS for company location",
+  "loginSuccess": "Login successful",
+  "hrPortal": "HR Portal",
+  "hrLogin": "HR Login",
+  "enterEmail": "Please enter your email",
+  "enterPassword": "Please enter your password",
+  "createNewAccount": "Create New Account",
+  "createAccount": "Create Account",
+  "joinHrTeam": "Join the HR team",
+  "enterFullName": "Please enter your full name",
+  "enterValidEmail": "Please enter a valid email",
+  "passwordRequirements": "Password must meet requirements",
+  "confirmPassword": "Confirm Password",
+  "passwordNotMatch": "Passwords do not match",
+  "mustAcceptTerms": "You must accept the terms and conditions",
+  "termsAndPrivacy": "I agree to the Terms & Conditions and Privacy Policy",
+  "registrationSuccess": "Account created successfully",
+  "success": "Success"
 }
 
 

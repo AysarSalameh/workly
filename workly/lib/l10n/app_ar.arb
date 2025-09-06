@@ -173,7 +173,22 @@
   "locationPermissionDeniedForever": "تم رفض إذن الموقع بشكل دائم",
   "errorGettingLocation": "خطأ أثناء الحصول على الموقع",
   "setCompanyLocationFirst": "يرجى تحديد موقع الشركة أولاً قبل الحفظ",
-  "useGps": "استخدم نظام تحديد المواقع العالمي (GPS) لتحديد موقع الشركة"
-
-
+  "useGps": "استخدم نظام تحديد المواقع العالمي (GPS) لتحديد موقع الشركة",
+  "loginSuccess": "تم تسجيل الدخول بنجاح",
+  "hrPortal": "بوابة الموارد البشرية",
+  "hrLogin": "تسجيل دخول الموارد البشرية",
+  "enterEmail": "الرجاء إدخال البريد الإلكتروني",
+  "enterValidEmail": "الرجاء إدخال بريد إلكتروني صحيح",
+  "enterPassword": "الرجاء إدخال كلمة المرور",
+  "createNewAccount": "إنشاء حساب جديد",
+  "createAccount": "إنشاء الحساب",
+  "joinHrTeam": "انضم لفريق الموارد البشرية",
+  "enterFullName": "الرجاء إدخال الاسم الكامل",
+  "passwordRequirements": "كلمة المرور لا تفي بالمتطلبات",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "passwordNotMatch": "كلمة المرور غير متطابقة",
+  "mustAcceptTerms": "يجب الموافقة على الشروط والأحكام",
+  "termsAndPrivacy": "أوافق على الشروط والأحكام وسياسة الخصوصية",
+  "success": "نجح",
+  "accountCreated": "تم إنشاء الحساب! يرجى التحقق من بريدك الإلكتروني."
 }

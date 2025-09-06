@@ -6,6 +6,10 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
+
+
+
+
   /// تسجيل الدخول بالبريد وكلمة المرور
   Future<User?> loginWithEmail(String email, String password) async {
     final credential = await _auth.signInWithEmailAndPassword(

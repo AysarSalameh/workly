@@ -546,4 +546,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get useGps => 'Use GPS for company location';
+
+  @override
+  String get loginSuccess => 'Login successful';
+
+  @override
+  String get hrPortal => 'HR Portal';
+
+  @override
+  String get hrLogin => 'HR Login';
+
+  @override
+  String get enterEmail => 'Please enter your email';
+
+  @override
+  String get enterPassword => 'Please enter your password';
+
+  @override
+  String get createNewAccount => 'Create New Account';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get joinHrTeam => 'Join the HR team';
+
+  @override
+  String get enterFullName => 'Please enter your full name';
+
+  @override
+  String get enterValidEmail => 'Please enter a valid email';
+
+  @override
+  String get passwordRequirements => 'Password must meet requirements';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get passwordNotMatch => 'Passwords do not match';
+
+  @override
+  String get mustAcceptTerms => 'You must accept the terms and conditions';
+
+  @override
+  String get termsAndPrivacy =>
+      'I agree to the Terms & Conditions and Privacy Policy';
+
+  @override
+  String get registrationSuccess => 'Account created successfully';
+
+  @override
+  String get success => 'Success';
 }

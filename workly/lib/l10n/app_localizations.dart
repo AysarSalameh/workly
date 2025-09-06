@@ -1147,6 +1147,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use GPS for company location'**
   String get useGps;
+
+  /// No description provided for @loginSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Login successful'**
+  String get loginSuccess;
+
+  /// No description provided for @hrPortal.
+  ///
+  /// In en, this message translates to:
+  /// **'HR Portal'**
+  String get hrPortal;
+
+  /// No description provided for @hrLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'HR Login'**
+  String get hrLogin;
+
+  /// No description provided for @enterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get enterEmail;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get enterPassword;
+
+  /// No description provided for @createNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Account'**
+  String get createNewAccount;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @joinHrTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Join the HR team'**
+  String get joinHrTeam;
+
+  /// No description provided for @enterFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your full name'**
+  String get enterFullName;
+
+  /// No description provided for @enterValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get enterValidEmail;
+
+  /// No description provided for @passwordRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must meet requirements'**
+  String get passwordRequirements;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @passwordNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordNotMatch;
+
+  /// No description provided for @mustAcceptTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'You must accept the terms and conditions'**
+  String get mustAcceptTerms;
+
+  /// No description provided for @termsAndPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the Terms & Conditions and Privacy Policy'**
+  String get termsAndPrivacy;
+
+  /// No description provided for @registrationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created successfully'**
+  String get registrationSuccess;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
 }
 
 class _AppLocalizationsDelegate
