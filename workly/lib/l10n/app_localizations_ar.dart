@@ -599,4 +599,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get success => 'نجح';
+
+  @override
+  String get companyName => 'اسم الشركة';
+
+  @override
+  String get status => 'الحالة';
+
+  @override
+  String get approved => 'مقبول';
+
+  @override
+  String get appending => 'قيد المراجعة';
+
+  @override
+  String get enterCompanyName => 'ادخل اسم الشركة';
+
+  @override
+  String get companySaved => 'تم حفظ بيانات الشركة بنجاح';
+
+  @override
+  String get saving => 'جاري الحفظ...';
+
+  @override
+  String get hrName => 'اسم المدير (HR)';
+
+  @override
+  String get enterHrName => 'يرجى إدخال اسم المدير';
+
+  @override
+  String get hrEmail => 'البريد الإلكتروني للمدير';
+
+  @override
+  String get enterHrEmail => 'يرجى إدخال البريد الإلكتروني للمدير';
+
+  @override
+  String get companyData => 'معلومات الشركة';
+
+  @override
+  String get companyEmail => 'البريد الإلكتروني للشركة';
+
+  @override
+  String get enterCompanyEmail => 'يرجى إدخال البريد الإلكتروني للشركة';
 }

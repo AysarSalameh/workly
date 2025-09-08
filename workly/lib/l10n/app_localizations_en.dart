@@ -598,4 +598,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get success => 'Success';
+
+  @override
+  String get companyName => 'Company Name';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get approved => 'Approved';
+
+  @override
+  String get appending => 'Appending';
+
+  @override
+  String get enterCompanyName => 'Enter Company Name';
+
+  @override
+  String get companySaved => 'Company data saved successfully';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get hrName => 'HR Name';
+
+  @override
+  String get enterHrName => 'Please enter the HR name';
+
+  @override
+  String get hrEmail => 'HR Email';
+
+  @override
+  String get enterHrEmail => 'Please enter the HR email';
+
+  @override
+  String get companyData => 'Company Data';
+
+  @override
+  String get companyEmail => 'Company Email';
+
+  @override
+  String get enterCompanyEmail => 'Please enter the company email';
 }

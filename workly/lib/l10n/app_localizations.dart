@@ -1249,6 +1249,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Success'**
   String get success;
+
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Name'**
+  String get companyName;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @approved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get approved;
+
+  /// No description provided for @appending.
+  ///
+  /// In en, this message translates to:
+  /// **'Appending'**
+  String get appending;
+
+  /// No description provided for @enterCompanyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Company Name'**
+  String get enterCompanyName;
+
+  /// No description provided for @companySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Company data saved successfully'**
+  String get companySaved;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @hrName.
+  ///
+  /// In en, this message translates to:
+  /// **'HR Name'**
+  String get hrName;
+
+  /// No description provided for @enterHrName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the HR name'**
+  String get enterHrName;
+
+  /// No description provided for @hrEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'HR Email'**
+  String get hrEmail;
+
+  /// No description provided for @enterHrEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the HR email'**
+  String get enterHrEmail;
+
+  /// No description provided for @companyData.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Data'**
+  String get companyData;
+
+  /// No description provided for @companyEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Email'**
+  String get companyEmail;
+
+  /// No description provided for @enterCompanyEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the company email'**
+  String get enterCompanyEmail;
 }
 
 class _AppLocalizationsDelegate

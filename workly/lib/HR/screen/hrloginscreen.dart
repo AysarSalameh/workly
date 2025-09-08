@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_flutter/HR/screen/hr_home_screen.dart';
+import 'package:projects_flutter/HR/screen/hrcompanyscreen.dart';
 import 'package:projects_flutter/HR/screen/hrregisterscreen.dart';
 import 'package:projects_flutter/auth/auth_service.dart';
 import 'package:projects_flutter/auth/cubit/auth_cubit.dart';
@@ -44,7 +45,7 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
             );
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => const HrHomeScreen()),
+              MaterialPageRoute(builder: (_) => const HrCompanyScreen()),
             );
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
