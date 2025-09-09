@@ -1,19 +1,9 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
-Widget buildProfileCard(BuildContext context, String name, String company, String imageBase64) {
+Widget buildProfileCard(
+    BuildContext context, String name, String company, String imageUrl) {
   final theme = Theme.of(context);
   final isDark = theme.brightness == Brightness.dark;
-
-  Uint8List? imageBytes;
-  if (imageBase64.isNotEmpty) {
-    try {
-      imageBytes = base64Decode(imageBase64);
-    } catch (e) {
-      imageBytes = null;
-    }
-  }
 
   return Container(
     padding: const EdgeInsets.all(20),
@@ -50,17 +40,32 @@ Widget buildProfileCard(BuildContext context, String name, String company, Strin
           ),
           child: CircleAvatar(
             radius: 45,
-            backgroundImage: imageBytes != null ? MemoryImage(imageBytes) : null,
             backgroundColor: theme.colorScheme.primaryContainer,
-            child: imageBytes == null
-                ? Icon(
-              Icons.person,
-              size: 45,
-              color: isDark
-                  ? theme.colorScheme.onSurface
-                  : theme.colorScheme.onPrimary,
-            )
-                : null,
+            child: ClipOval(
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: 90,
+                height: 90,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(
+                    Icons.person,
+                    size: 45,
+                    color: isDark
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onPrimary,
+                  );
+                },
+              )
+                  : Icon(
+                Icons.person,
+                size: 45,
+                color: isDark
+                    ? theme.colorScheme.onSurface
+                    : theme.colorScheme.onPrimary,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 20),

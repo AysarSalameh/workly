@@ -486,7 +486,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get december => 'December';
 
   @override
-  String get totalWorkHours => 'Total Work Hours';
+  String get totalWorkHours => 'Work Hours';
 
   @override
   String get notCheckedOutYet => 'Not checked out yet';
@@ -640,4 +640,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterCompanyEmail => 'Please enter the company email';
+
+  @override
+  String get noEmployeesFound => 'No employees found';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get employeeInformation => 'Employee Information';
+
+  @override
+  String get viewId => 'View ID';
+
+  @override
+  String get downloadId => 'Download ID';
+
+  @override
+  String get loadingEmployees => 'Loading Employees...';
+
+  @override
+  String get pleaseWaitWhileFetchingTeam =>
+      'Please wait while we fetch your team data';
+
+  @override
+  String get teamMembers => 'Team Members';
+
+  @override
+  String get manageEmployees => 'Manage your company employees';
+
+  @override
+  String get searchEmployees => 'Search employees...';
+
+  @override
+  String get employeeStatus => 'Employee Status';
+
+  @override
+  String get pendingReview => 'Pending Review';
+
+  @override
+  String get deleted => 'Deleted';
+
+  @override
+  String get confirmDelete => 'Confirm Delete';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String deleteMessage(Object name) {
+    return 'Are you sure you want to delete $name? This action cannot be undone.';
+  }
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get loadingAddress => 'Loading address...';
+
+  @override
+  String get addressUnavailable => 'Address not available';
 }

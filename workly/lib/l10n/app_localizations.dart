@@ -1031,7 +1031,7 @@ abstract class AppLocalizations {
   /// No description provided for @totalWorkHours.
   ///
   /// In en, this message translates to:
-  /// **'Total Work Hours'**
+  /// **'Work Hours'**
   String get totalWorkHours;
 
   /// No description provided for @notCheckedOutYet.
@@ -1333,6 +1333,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter the company email'**
   String get enterCompanyEmail;
+
+  /// No description provided for @noEmployeesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No employees found'**
+  String get noEmployeesFound;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @employeeInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Information'**
+  String get employeeInformation;
+
+  /// No description provided for @viewId.
+  ///
+  /// In en, this message translates to:
+  /// **'View ID'**
+  String get viewId;
+
+  /// No description provided for @downloadId.
+  ///
+  /// In en, this message translates to:
+  /// **'Download ID'**
+  String get downloadId;
+
+  /// No description provided for @loadingEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading Employees...'**
+  String get loadingEmployees;
+
+  /// No description provided for @pleaseWaitWhileFetchingTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait while we fetch your team data'**
+  String get pleaseWaitWhileFetchingTeam;
+
+  /// No description provided for @teamMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Members'**
+  String get teamMembers;
+
+  /// No description provided for @manageEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your company employees'**
+  String get manageEmployees;
+
+  /// No description provided for @searchEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Search employees...'**
+  String get searchEmployees;
+
+  /// No description provided for @employeeStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Status'**
+  String get employeeStatus;
+
+  /// No description provided for @pendingReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Review'**
+  String get pendingReview;
+
+  /// No description provided for @deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get deleted;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDelete;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {name}? This action cannot be undone.'**
+  String deleteMessage(Object name);
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @loadingAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading address...'**
+  String get loadingAddress;
+
+  /// No description provided for @addressUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Address not available'**
+  String get addressUnavailable;
 }
 
 class _AppLocalizationsDelegate

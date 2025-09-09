@@ -12,10 +12,10 @@ import 'package:projects_flutter/Employee/screens/monthly_schedule_screen.dart';
 import 'package:projects_flutter/Employee/screens/settingsscreen.dart';
 
 Widget buildDrawer(
-    BuildContext context,
-    AppLocalizations loc,
-    Map<String, dynamic>? employeeData,
-    ) {
+  BuildContext context,
+  AppLocalizations loc,
+  Map<String, dynamic>? employeeData,
+) {
   final theme = Theme.of(context);
   final isDark = theme.brightness == Brightness.dark;
   final user = FirebaseAuth.instance.currentUser;
@@ -61,7 +61,9 @@ Widget buildDrawer(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isDark ? theme.colorScheme.onPrimary : Colors.white,
+                      color: isDark
+                          ? theme.colorScheme.onPrimary
+                          : Colors.white,
                       width: 4,
                     ),
                     boxShadow: [
@@ -74,45 +76,21 @@ Widget buildDrawer(
                   ),
                   child: ClipOval(
                     child: imageUrl.isNotEmpty
-                        ? Image.memory(
-                      base64Decode(imageUrl),
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: isDark
-                              ? theme.colorScheme.surface
-                              : Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
-                            color: isDark
-                                ? theme.colorScheme.onSurface
-                                : Colors.grey[600],
-                          ),
-                        );
-                      },
-                    )
-                        : Container(
-                      color: isDark
-                          ? theme.colorScheme.surface
-                          : Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
-                        color: isDark
-                            ? theme.colorScheme.onSurface
-                            : Colors.grey[600],
-                      ),
-                    ),
+                        ? Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return _buildDefaultAvatar(isDark, theme);
+                            },
+                          )
+                        : _buildDefaultAvatar(isDark, theme),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   name,
                   style: TextStyle(
-                    color: isDark
-                        ? theme.colorScheme.onPrimary
-                        : Colors.white,
+                    color: isDark ? theme.colorScheme.onPrimary : Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -153,7 +131,8 @@ Widget buildDrawer(
                   onTap: () => Navigator.pop(context),
                 ),
 
-                buildDrawerItem(context: context,
+                buildDrawerItem(
+                  context: context,
                   icon: Icons.history,
                   title: loc.attendanceHistory,
                   onTap: () => Navigator.push(
@@ -163,7 +142,8 @@ Widget buildDrawer(
                     ),
                   ),
                 ),
-                buildDrawerItem(context: context,
+                buildDrawerItem(
+                  context: context,
                   icon: Icons.calendar_month,
                   title: loc.monthlySchedule,
                   onTap: () {
@@ -175,9 +155,9 @@ Widget buildDrawer(
                       ),
                     );
                   },
-
                 ),
-                buildDrawerItem(context: context,
+                buildDrawerItem(
+                  context: context,
                   icon: Icons.person_outline,
                   title: loc.profile,
                   onTap: () {
@@ -189,13 +169,13 @@ Widget buildDrawer(
                       ),
                     );
                   },
-
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Divider(thickness: 1),
                 ),
-                buildDrawerItem(context: context,
+                buildDrawerItem(
+                  context: context,
                   icon: Icons.settings,
                   title: loc.settings,
                   onTap: () {
@@ -207,9 +187,9 @@ Widget buildDrawer(
                       ),
                     );
                   },
-
                 ),
-                buildDrawerItem(context: context,
+                buildDrawerItem(
+                  context: context,
                   icon: Icons.help_outline,
                   title: loc.help,
                   onTap: () {
@@ -221,7 +201,6 @@ Widget buildDrawer(
                       ),
                     );
                   },
-
                 ),
               ],
             ),
@@ -287,6 +266,17 @@ Widget buildDrawer(
           ),
         ],
       ),
+    ),
+  );
+}
+
+Widget _buildDefaultAvatar(bool isDark, ThemeData theme) {
+  return Container(
+    color: isDark ? theme.colorScheme.surface : Colors.white,
+    child: Icon(
+      Icons.person,
+      size: 50,
+      color: isDark ? theme.colorScheme.onSurface : Colors.grey[600],
     ),
   );
 }

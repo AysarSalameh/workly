@@ -11,7 +11,9 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
   final _firestore = FirebaseFirestore.instance;
   final _storage = FirebaseStorage.instance;
 
-  /// اختيار صورة (Logo) للشركة من الجهاز
+  Uint8List? logoBytes; // لتخزين الصورة للعرض فوراً
+
+  /// اختيار صورة
   Future<void> pickLogoImage() async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -22,6 +24,7 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
       if (result != null && result.files.isNotEmpty) {
         final fileBytes = result.files.first.bytes;
         if (fileBytes != null) {
+          logoBytes = fileBytes;
           emit(LogoPicked(fileBytes));
         } else {
           emit(HrCompanyFailure("فشل قراءة الصورة"));
@@ -31,24 +34,20 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
       emit(HrCompanyFailure("فشل اختيار الصورة: $e"));
     }
   }
-
-  Future<String?> uploadLogo(Uint8List? imageBytes, String uid) async {
-    if (imageBytes == null) {
+  /// رفع الصورة على Firebase Storage (ويب)
+  Future<String?> uploadLogo(String uid) async {
+    if (logoBytes == null) {
       emit(HrCompanyFailure("لا توجد صورة لرفعها"));
       return null;
     }
-
     try {
-      final ref = _storage.ref().child('company_logos/$uid.png');
-
-      // emit حالة التحميل عند بدء رفع الصورة
       emit(HrCompanyLoading());
 
-      await ref.putData(imageBytes);
-      final downloadUrl = await ref.getDownloadURL();
+      final safeUid = uid.replaceAll('@', '_').replaceAll('.', '_');
+      final ref = _storage.ref().child('company_logos/$safeUid.png');
 
-      // emit حالة النجاح بعد رفع الصورة
-      emit(HrCompanySuccess("تم رفع الصورة بنجاح"));
+      await ref.putData(logoBytes!);
+      final downloadUrl = await ref.getDownloadURL();
 
       return downloadUrl;
     } catch (e) {
@@ -57,10 +56,7 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
     }
   }
 
-
-
-
-  /// حفظ بيانات الشركة مع رابط الصورة (لو موجود)
+  /// حفظ بيانات الشركة مع رابط الصورة
   Future<void> saveCompanyData({
     required String companyName,
     required String code,
@@ -68,12 +64,13 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
     required String hrName,
     required String companyEmail,
     required String uid,
-    Uint8List? logoImage,
   }) async {
-   emit(HrCompanyLoading());
     try {
+      emit(HrCompanyLoading());
+
       String hrImageUrl = "https://via.placeholder.com/150";
-      final uploadedUrl = await uploadLogo(logoImage, uid);
+
+      final uploadedUrl = await uploadLogo(uid);
       if (uploadedUrl != null) hrImageUrl = uploadedUrl;
 
       await _firestore.collection('companies').doc(uid).set({
@@ -90,6 +87,27 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
       emit(HrCompanySuccess("تم حفظ بيانات الشركة بنجاح"));
     } catch (e) {
       emit(HrCompanyFailure("فشل الحفظ: $e"));
+    }
+  }
+  /// جلب بيانات الشركة
+  Future<void> fetchCompanyData(String companyEmailid) async {
+    emit(HrCompanyLoading());
+    try {
+      final doc = await _firestore.collection('companies').doc(companyEmailid).get();
+      if (doc.exists) {
+        final data = doc.data()!;
+        emit(CompanyLoaded(
+          name: data['name'] ?? '',
+          code: data['code'] ?? '',
+          status: data['status'] ?? '',
+          hrName: data['hrName'] ?? '',
+          hrImageUrl: data['hrImageUrl'] ?? '',
+        ));
+      } else {
+        emit(HrCompanyFailure('Company not found'));
+      }
+    } catch (e) {
+      emit(HrCompanyFailure(e.toString()));
     }
   }
 }

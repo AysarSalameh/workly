@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_flutter/HR/company/hrcompanycubit.dart';
 import 'package:projects_flutter/HR/company/hrcompanystate.dart';
-import 'package:projects_flutter/HR/screen/hr_home_screen.dart';
+import 'package:projects_flutter/HR/screen/hrdashboardscreen.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
 class HrCompanyScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
   final TextEditingController _hrNameController = TextEditingController();
 
   final String _companyEmail = FirebaseAuth.instance.currentUser?.email ?? '';
-  final String _uid = FirebaseAuth.instance.currentUser!.uid;
+  final String _uid = FirebaseAuth.instance.currentUser?.email ?? '';
 
   @override
   void initState() {
@@ -52,7 +51,7 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
     return code;
   }
 
-  void _onSave(BuildContext context, Uint8List? logoImage) {
+  void _onSave(BuildContext context, Uint8List? logoImageBytes) {
     if (!_formKey.currentState!.validate()) return;
     final cubit = context.read<HrCompanyCubit>();
     cubit.saveCompanyData(
@@ -62,7 +61,6 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
       hrName: _hrNameController.text.trim(),
       companyEmail: _companyEmail,
       uid: _uid,
-      logoImage: logoImage,
     );
   }
 
@@ -81,10 +79,9 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
             );
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => const HrHomeScreen()),
+              MaterialPageRoute(builder: (_) => HrDashboardScreen()),
             );
-          }
- else if (state is HrCompanyFailure) {
+          } else if (state is HrCompanyFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
@@ -93,7 +90,9 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
         builder: (context, state) {
           final cubit = context.read<HrCompanyCubit>();
           final isLoading = state is HrCompanyLoading;
-          final logo = (state is LogoPicked) ? state.logoImage : null;
+
+          // هنا نستخدم Uint8List من Cubit للعرض
+          final Uint8List? logoBytes = cubit.logoBytes;
 
           return Scaffold(
             appBar: AppBar(
@@ -120,11 +119,15 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           child: CircleAvatar(
                             radius: 50,
                             backgroundColor: Colors.grey.shade300,
-                            backgroundImage:
-                            logo != null ? MemoryImage(logo) : null,
-                            child: logo == null
-                                ? Icon(Icons.business,
-                                size: 50, color: Colors.grey.shade700)
+                            backgroundImage: logoBytes != null
+                                ? MemoryImage(logoBytes)
+                                : null,
+                            child: logoBytes == null
+                                ? Icon(
+                              Icons.business,
+                              size: 50,
+                              color: Colors.grey.shade700,
+                            )
                                 : null,
                           ),
                         ),
@@ -134,8 +137,10 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           controller: _hrNameController,
                           decoration: InputDecoration(
                             labelText: loc.hrName,
-                            prefixIcon: Icon(Icons.person,
-                                color: Colors.blue.shade600),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.blue.shade600,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -150,8 +155,10 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           readOnly: true,
                           decoration: InputDecoration(
                             labelText: loc.companyEmail,
-                            prefixIcon: Icon(Icons.email,
-                                color: Colors.blue.shade600),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.blue.shade600,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -163,8 +170,10 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           controller: _companyNameController,
                           decoration: InputDecoration(
                             labelText: loc.companyName,
-                            prefixIcon: Icon(Icons.business,
-                                color: Colors.blue.shade600),
+                            prefixIcon: Icon(
+                              Icons.business,
+                              color: Colors.blue.shade600,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -180,8 +189,10 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           readOnly: true,
                           decoration: InputDecoration(
                             labelText: loc.companyCode,
-                            prefixIcon:
-                            Icon(Icons.vpn_key, color: Colors.green.shade600),
+                            prefixIcon: Icon(
+                              Icons.vpn_key,
+                              color: Colors.green.shade600,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -195,16 +206,20 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           child: ElevatedButton.icon(
                             icon: isLoading
                                 ? const CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white)
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            )
                                 : const Icon(Icons.save, color: Colors.white),
                             label: Text(
                               isLoading ? loc.saving : loc.save,
                               style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            onPressed:
-                            isLoading ? null : () => _onSave(context, logo),
+                            onPressed: isLoading
+                                ? null
+                                : () => _onSave(context, logoBytes),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue.shade600,
                               shape: RoundedRectangleBorder(
@@ -225,4 +240,3 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
     );
   }
 }
-

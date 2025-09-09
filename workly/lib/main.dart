@@ -2,14 +2,16 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projects_flutter/Employee/ThemeCubit/themecubit.dart';
 import 'package:projects_flutter/Employee/data_profile/profile_cubit.dart';
+import 'package:projects_flutter/HR/company/hrcompanycubit.dart';
 import 'package:projects_flutter/HR/screen/hrloginscreen.dart';
 import 'package:projects_flutter/auth/auth_service.dart';
 import 'package:projects_flutter/auth/cubit/auth_cubit.dart';
-import 'package:projects_flutter/hr/screen/hr_home_screen.dart';
+import 'package:projects_flutter/hr/screen/hrdashboardscreen.dart';
 import 'package:projects_flutter/languge/cubit/language_cubit.dart';
 import '/l10n/app_localizations.dart';
 import '/Employee/screens/login_screen.dart';
@@ -29,7 +31,12 @@ void main() async {
     await FirebaseAppCheck.instance.activate(
       androidProvider: AndroidProvider.debug,
     );
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown, // اختياري
+    ]);
   }
+
 
   runApp(const MyApp());
 }
@@ -46,6 +53,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ProfileCubit()),
         BlocProvider(create: (_) => AuthCubit(AuthService())),
         BlocProvider(create: (_) => LanguageCubit()),
+        BlocProvider(create: (_) => HrCompanyCubit()),
       ],
       child: BlocBuilder<LanguageCubit, Locale>(
         builder: (context, locale) {

@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:convert'; // لازم للتحويل إلى Base64
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,76 +20,20 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Map<String, dynamic>? userData;
 
+  final FirebaseStorage storage = FirebaseStorage.instance;
+
   // تحميل بيانات المستخدم
   Future<void> loadUser(String email) async {
     emit(ProfileLoading());
     try {
-      final doc = await FirebaseFirestore.instance.collection('Employee').doc(email).get();
+      final doc = await FirebaseFirestore.instance
+          .collection('Employee')
+          .doc(email)
+          .get();
       userData = doc.data();
       emit(ProfileLoaded(userData!));
     } catch (e) {
       emit(ProfileError("Failed to load user: $e"));
-    }
-  }
-
-
-  // اختيار صورة البروفايل
-  Future<void> pickProfileImage(BuildContext context, AppLocalizations loc) async {
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: Text(loc.camera),
-            onTap: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: Text(loc.gallery),
-            onTap: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
-    );
-
-    if (source != null) {
-      final picked = await ImagePicker().pickImage(source: source, imageQuality: 80);
-      if (picked != null) {
-        profileImage = File(picked.path);
-        emit(ProfileImagePicked(profileImage!));
-      }
-    }
-  }
-
-  // اختيار صورة الهوية
-  Future<void> pickIdImage(BuildContext context, AppLocalizations loc) async {
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: Text(loc.camera),
-            onTap: () => Navigator.pop(context, ImageSource.camera),
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: Text(loc.gallery),
-            onTap: () => Navigator.pop(context, ImageSource.gallery),
-          ),
-        ],
-      ),
-    );
-
-    if (source != null) {
-      final picked = await ImagePicker().pickImage(source: source, imageQuality: 80);
-      if (picked != null) {
-        idImage = File(picked.path);
-        emit(IdImagePicked(idImage!));
-      }
     }
   }
 
@@ -127,6 +71,87 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  // اختيار صورة البروفايل
+  Future<void> pickProfileImage(
+    BuildContext context,
+    AppLocalizations loc,
+  ) async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (_) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: Text(loc.camera),
+            onTap: () => Navigator.pop(context, ImageSource.camera),
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: Text(loc.gallery),
+            onTap: () => Navigator.pop(context, ImageSource.gallery),
+          ),
+        ],
+      ),
+    );
+
+    if (source != null) {
+      final picked = await ImagePicker().pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+      if (picked != null) {
+        profileImage = File(picked.path);
+        emit(ProfileImagePicked(profileImage!));
+      }
+    }
+  }
+
+  // اختيار صورة الهوية
+  Future<void> pickIdImage(BuildContext context, AppLocalizations loc) async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (_) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: Text(loc.camera),
+            onTap: () => Navigator.pop(context, ImageSource.camera),
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: Text(loc.gallery),
+            onTap: () => Navigator.pop(context, ImageSource.gallery),
+          ),
+        ],
+      ),
+    );
+
+    if (source != null) {
+      final picked = await ImagePicker().pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+      if (picked != null) {
+        idImage = File(picked.path);
+        emit(IdImagePicked(idImage!));
+      }
+    }
+  }
+
+  // رفع صورة إلى Firebase Storage وإرجاع رابطها
+  Future<String?> _uploadImage(File file, String path) async {
+    try {
+      final ref = storage.ref().child(path);
+      final task = await ref.putFile(file);
+      final url = await task.ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> editSaveProfile({
     required String name,
     required String birthDate,
@@ -150,17 +175,18 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     emit(ProfileLoading());
     try {
-      String? profileBase64;
-      String? idBase64;
+      String? profileUrl;
+      String? idUrl;
 
       if (profileImage != null) {
-        final bytes = await profileImage!.readAsBytes();
-        profileBase64 = base64Encode(bytes);
+        profileUrl = await _uploadImage(
+          profileImage!,
+          "profile_images/$email.jpg",
+        );
       }
 
       if (idImage != null) {
-        final bytes = await idImage!.readAsBytes();
-        idBase64 = base64Encode(bytes);
+        idUrl = await _uploadImage(idImage!, "id_images/$email.jpg");
       }
 
       final updateData = {
@@ -170,8 +196,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         'Id': Id,
         'address': address,
         'iban': iban,
-        if (profileBase64 != null) 'profileImage': profileBase64,
-        if (idBase64 != null) 'idImage': idBase64,
+        if (profileUrl != null) 'profileImage': profileUrl,
+        if (idUrl != null) 'idImage': idUrl,
       };
 
       await FirebaseFirestore.instance
@@ -179,10 +205,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           .doc(email)
           .update(updateData);
 
-      final updatedUserData = {
-        ...?userData,
-        ...updateData,
-      };
+      final updatedUserData = {...?userData, ...updateData};
 
       emit(ProfileEdited(updatedUserData));
     } catch (e) {
@@ -218,17 +241,18 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       emit(ProfileLoading());
 
-      String? profileBase64;
-      String? idBase64;
+      String? profileUrl;
+      String? idUrl;
 
       if (profileImage != null && await profileImage!.exists()) {
-        final bytes = await profileImage!.readAsBytes();
-        profileBase64 = base64Encode(bytes);
+        profileUrl = await _uploadImage(
+          profileImage!,
+          "profile_images/$email.jpg",
+        );
       }
 
       if (idImage != null && await idImage!.exists()) {
-        final bytes = await idImage!.readAsBytes();
-        idBase64 = base64Encode(bytes);
+        idUrl = await _uploadImage(idImage!, "id_images/$email.jpg");
       }
 
       await FirebaseFirestore.instance.collection('Employee').doc(email).set({
@@ -241,8 +265,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         'phoneNumber': phoneNumer,
         'Id': Id,
         'hrStatus': 'pending',
-        'profileImage': profileBase64,
-        'idImage': idBase64,
+        'profileImage': profileUrl,
+        'idImage': idUrl,
         'companyLat': companyLat,
         'companyLng': companyLng,
         'createdAt': FieldValue.serverTimestamp(),
@@ -254,4 +278,3 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 }
-

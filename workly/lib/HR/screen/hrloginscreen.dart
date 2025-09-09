@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects_flutter/HR/screen/hr_home_screen.dart';
-import 'package:projects_flutter/HR/screen/hrcompanyscreen.dart';
+import 'package:projects_flutter/HR/screen/hrdashboardscreen.dart';
+import 'package:projects_flutter/HR/screen/hrProfilescreen.dart';
 import 'package:projects_flutter/HR/screen/hrregisterscreen.dart';
 import 'package:projects_flutter/auth/auth_service.dart';
 import 'package:projects_flutter/auth/cubit/auth_cubit.dart';
 import 'package:projects_flutter/auth/cubit/auth_state.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 import 'package:projects_flutter/languge/cubit/language_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HrLoginScreen extends StatefulWidget {
   const HrLoginScreen({super.key});
@@ -21,6 +23,7 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
+  final String _uid = FirebaseAuth.instance.currentUser?.email ?? '';
 
   @override
   void dispose() {
@@ -41,15 +44,37 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
         listener: (context, state) async {
           if (state is AuthSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(loc.loginSuccess), backgroundColor: Colors.green),
+              SnackBar(
+                content: Text(loc.loginSuccess),
+                backgroundColor: Colors.green,
+              ),
             );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const HrCompanyScreen()),
-            );
+
+            final uid = FirebaseAuth.instance.currentUser!.email;
+            final doc = await FirebaseFirestore.instance
+                .collection('companies')
+                .doc(uid)
+                .get();
+
+            if (doc.exists) {
+              // بيانات الشركة موجودة -> اذهب للوحة التحكم مباشرة
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) =>  HrDashboardScreen()),
+              );
+            } else {
+              // بيانات الشركة غير موجودة -> اذهب لشاشة تعبئة بيانات الشركة
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const HrCompanyScreen()),
+              );
+            }
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
             );
           }
         },
@@ -80,7 +105,8 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                         child: Container(
                           width: isWeb ? 450 : screenWidth * 0.9,
                           padding: const EdgeInsets.all(32),
-                          margin: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 32, horizontal: 16),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -100,7 +126,8 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                 alignment: Alignment.topRight,
                                 child: IconButton(
                                   icon: const Icon(Icons.language),
-                                  onPressed: () => context.read<LanguageCubit>().toggle(),
+                                  onPressed: () =>
+                                      context.read<LanguageCubit>().toggle(),
                                 ),
                               ),
 
@@ -109,17 +136,26 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                 width: 80,
                                 height: 80,
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [Colors.blue.shade600, Colors.indigo.shade600]),
+                                  gradient: LinearGradient(colors: [
+                                    Colors.blue.shade600,
+                                    Colors.indigo.shade600
+                                  ]),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: const Icon(Icons.business_center, color: Colors.white, size: 40),
+                                child: const Icon(Icons.business_center,
+                                    color: Colors.white, size: 40),
                               ),
                               const SizedBox(height: 24),
                               Text(loc.hrPortal,
                                   style: TextStyle(
-                                      fontSize: 28, fontWeight: FontWeight.bold, color: Colors.grey.shade800)),
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey.shade800)),
                               const SizedBox(height: 8),
-                              Text(loc.hrLogin, style: TextStyle(fontSize: 16, color: Colors.grey.shade600)),
+                              Text(loc.hrLogin,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey.shade600)),
                               const SizedBox(height: 32),
 
                               Form(
@@ -131,17 +167,25 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       controller: emailController,
                                       keyboardType: TextInputType.emailAddress,
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) return loc.enterEmail;
-                                        if (!value.contains('@')) return loc.enterValidEmail;
+                                        if (value == null || value.isEmpty)
+                                          return loc.enterEmail;
+                                        if (!value.contains('@'))
+                                          return loc.enterValidEmail;
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         labelText: loc.email,
-                                        prefixIcon: Icon(Icons.email_outlined, color: Colors.blue.shade600),
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        prefixIcon: Icon(Icons.email_outlined,
+                                            color: Colors.blue.shade600),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(12)),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                            borderSide: BorderSide(color: Colors.blue.shade600, width: 2)),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                            borderSide: BorderSide(
+                                                color: Colors.blue.shade600,
+                                                width: 2)),
                                         filled: true,
                                         fillColor: Colors.grey.shade50,
                                       ),
@@ -153,21 +197,33 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       controller: passwordController,
                                       obscureText: !_isPasswordVisible,
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) return loc.enterPassword;
+                                        if (value == null || value.isEmpty)
+                                          return loc.enterPassword;
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         labelText: loc.password,
-                                        prefixIcon: Icon(Icons.lock_outlined, color: Colors.blue.shade600),
+                                        prefixIcon: Icon(Icons.lock_outlined,
+                                            color: Colors.blue.shade600),
                                         suffixIcon: IconButton(
-                                          icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                                          icon: Icon(
+                                              _isPasswordVisible
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility,
                                               color: Colors.grey.shade600),
-                                          onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                                          onPressed: () => setState(() =>
+                                          _isPasswordVisible =
+                                          !_isPasswordVisible),
                                         ),
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(12)),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                            borderSide: BorderSide(color: Colors.blue.shade600, width: 2)),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                            borderSide: BorderSide(
+                                                color: Colors.blue.shade600,
+                                                width: 2)),
                                         filled: true,
                                         fillColor: Colors.grey.shade50,
                                       ),
@@ -182,19 +238,29 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                         onPressed: isLoading
                                             ? null
                                             : () {
-                                          if (_formKey.currentState!.validate()) {
+                                          if (_formKey.currentState!
+                                              .validate()) {
                                             cubit.loginWithEmail(
-                                                emailController.text.trim(), passwordController.text.trim());
+                                                emailController.text
+                                                    .trim(),
+                                                passwordController.text
+                                                    .trim());
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade600,
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(12)),
                                         ),
                                         child: isLoading
-                                            ? const CircularProgressIndicator(color: Colors.white)
+                                            ? const CircularProgressIndicator(
+                                            color: Colors.white)
                                             : Text(loc.login,
-                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight:
+                                                FontWeight.w600)),
                                       ),
                                     ),
                                     const SizedBox(height: 16),
@@ -204,17 +270,32 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       width: double.infinity,
                                       height: 50,
                                       child: OutlinedButton.icon(
-                                        icon: Image.asset('assets/images/google_logo.png',
-                                            height: 22, width: 22, errorBuilder: (context, error, stackTrace) {
-                                              return Icon(Icons.login, color: Theme.of(context).iconTheme.color);
+                                        icon: Image.asset(
+                                            'assets/images/google_logo.png',
+                                            height: 22,
+                                            width: 22,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Icon(Icons.login,
+                                                  color: Theme.of(context)
+                                                      .iconTheme
+                                                      .color);
                                             }),
                                         label: Text(loc.continueWithGoogle,
-                                            style: Theme.of(context).textTheme.bodyMedium),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium),
                                         style: OutlinedButton.styleFrom(
-                                          side: BorderSide(color: Theme.of(context).dividerColor),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                          side: BorderSide(
+                                              color:
+                                              Theme.of(context).dividerColor),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(12)),
                                         ),
-                                        onPressed: isLoading ? null : () => cubit.loginWithGoogleWeb(),
+                                        onPressed: isLoading
+                                            ? null
+                                            : () => cubit.loginWithGoogleWeb(),
                                       ),
                                     ),
                                     const SizedBox(height: 12),
@@ -224,14 +305,26 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       width: double.infinity,
                                       height: 50,
                                       child: OutlinedButton.icon(
-                                        icon: Icon(Icons.apple, color: Theme.of(context).iconTheme.color, size: 22),
+                                        icon: Icon(Icons.apple,
+                                            color: Theme.of(context)
+                                                .iconTheme
+                                                .color,
+                                            size: 22),
                                         label: Text(loc.continueWithApple,
-                                            style: Theme.of(context).textTheme.bodyMedium),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium),
                                         style: OutlinedButton.styleFrom(
-                                          side: BorderSide(color: Theme.of(context).dividerColor),
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                          side: BorderSide(
+                                              color:
+                                              Theme.of(context).dividerColor),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(12)),
                                         ),
-                                        onPressed: isLoading ? null : () => cubit.loginWithAppleWeb(),
+                                        onPressed: isLoading
+                                            ? null
+                                            : () => cubit.loginWithAppleWeb(),
                                       ),
                                     ),
                                     const SizedBox(height: 24),
@@ -239,11 +332,15 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                     // Register Button
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (_) => const HrRegisterScreen()));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                const HrRegisterScreen()));
                                       },
                                       child: Text(loc.createNewAccount,
-                                          style: const TextStyle(color: Colors.grey)),
+                                          style:
+                                          const TextStyle(color: Colors.grey)),
                                     ),
                                   ],
                                 ),

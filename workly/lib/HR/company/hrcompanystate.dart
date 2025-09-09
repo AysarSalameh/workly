@@ -28,3 +28,18 @@ class HrCompanyFailure extends HrCompanyState {
   final String error;
   HrCompanyFailure(this.error);
 }
+class CompanyLoaded extends HrCompanyState {
+  final String name;
+  final String code;
+  final String status;
+  final String hrName;
+  final String hrImageUrl;
+
+  CompanyLoaded({
+    required this.name,
+    required this.code,
+    required this.status,
+    required this.hrName,
+    required this.hrImageUrl,
+  });
+}

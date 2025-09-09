@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +88,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       builder: (context, state) {
         if (state is ProfileLoading || state is ProfileInitial) {
           return Scaffold(
-            backgroundColor: isDark ? Color(0xFF121212) : Colors.white,
+            backgroundColor: isDark ? const Color(0xFF121212) : Colors.white,
             body: const Center(child: CircularProgressIndicator()),
           );
         }
@@ -102,17 +101,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
         final data = state is ProfileLoaded ? state.userData : {};
 
-        final profileImageProvider = cubit.profileImage != null
-            ? FileImage(cubit.profileImage!)
-            : (data['profileImage'] != null
-            ? MemoryImage(base64Decode(data['profileImage']))
-            : null) as ImageProvider?;
+        // صورة البروفايل
+        ImageProvider? profileImageProvider;
+        if (cubit.profileImage != null) {
+          profileImageProvider = FileImage(cubit.profileImage!);
+        } else if (data['profileImage'] != null && data['profileImage'] != '') {
+          profileImageProvider = NetworkImage(data['profileImage']);
+        }
 
-        final idImageProvider = cubit.idImage != null
-            ? FileImage(cubit.idImage!)
-            : (data['idImage'] != null
-            ? MemoryImage(base64Decode(data['idImage']))
-            : null) as ImageProvider?;
+        // صورة الهوية
+        ImageProvider? idImageProvider;
+        if (cubit.idImage != null) {
+          idImageProvider = FileImage(cubit.idImage!);
+        } else if (data['idImage'] != null && data['idImage'] != '') {
+          idImageProvider = NetworkImage(data['idImage']);
+        }
 
         return Scaffold(
           backgroundColor: isDark ? const Color(0xFF121212) : Colors.white,
@@ -135,7 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 GestureDetector(
                   onTap: () async {
                     await cubit.pickProfileImage(context, loc);
-                    setState(() {});
+                    setState(() {}); // تحديث الواجهة فقط
                   },
                   child: Stack(
                     alignment: Alignment.center,
@@ -150,7 +153,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Container(
                         width: 40,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.black54,
                           shape: BoxShape.circle,
                         ),
@@ -166,7 +169,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 GestureDetector(
                   onTap: () async {
                     await cubit.pickIdImage(context, loc);
-                    setState(() {});
+                    setState(() {}); // تحديث الواجهة فقط
                   },
                   child: Stack(
                     alignment: Alignment.center,
@@ -178,8 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.grey),
                           image: idImageProvider != null
-                              ? DecorationImage(
-                              image: idImageProvider, fit: BoxFit.cover)
+                              ? DecorationImage(image: idImageProvider, fit: BoxFit.cover)
                               : null,
                         ),
                         child: idImageProvider == null
@@ -190,8 +192,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             const SizedBox(height: 8),
                             Text(
                               loc.uploadId,
-                              style: TextStyle(
-                                  color: isDark ? Colors.white : Colors.black),
+                              style: TextStyle(color: isDark ? Colors.white : Colors.black),
                             ),
                           ],
                         )
@@ -200,7 +201,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Container(
                         width: 40,
                         height: 40,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.black54,
                           shape: BoxShape.circle,
                         ),
@@ -244,7 +245,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     icon: Icons.account_balance,
                     isDark: isDark),
                 const SizedBox(height: 20),
-                buildDateField(context: context, controller: birthController, isDark: isDark),
+                buildDateField(
+                    context: context, controller: birthController, isDark: isDark),
                 const SizedBox(height: 20),
 
                 // زر الحفظ

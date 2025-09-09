@@ -488,7 +488,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get december => 'ديسمبر';
 
   @override
-  String get totalWorkHours => 'إجمالي ساعات العمل';
+  String get totalWorkHours => ' ساعات العمل';
 
   @override
   String get notCheckedOutYet => 'لم ينصرف بعد';
@@ -641,4 +641,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get enterCompanyEmail => 'يرجى إدخال البريد الإلكتروني للشركة';
+
+  @override
+  String get noEmployeesFound => 'لا يوجد موظفين';
+
+  @override
+  String get total => 'المجموع';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get tryAgain => 'حاول مرة أخرى';
+
+  @override
+  String get employeeInformation => 'معلومات الموظف';
+
+  @override
+  String get viewId => 'عرض الهوية';
+
+  @override
+  String get downloadId => 'تحميل الهوية';
+
+  @override
+  String get loadingEmployees => 'جاري تحميل الموظفين...';
+
+  @override
+  String get pleaseWaitWhileFetchingTeam =>
+      'يرجى الانتظار بينما نقوم بجلب بيانات فريقك';
+
+  @override
+  String get teamMembers => 'أعضاء الفريق';
+
+  @override
+  String get manageEmployees => 'إدارة موظفي الشركة';
+
+  @override
+  String get searchEmployees => 'البحث عن موظفين...';
+
+  @override
+  String get employeeStatus => 'حالة الموظف';
+
+  @override
+  String get pendingReview => 'قيد المراجعة';
+
+  @override
+  String get deleted => 'محذوف';
+
+  @override
+  String get confirmDelete => 'تأكيد الحذف';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String deleteMessage(Object name) {
+    return 'هل أنت متأكد أنك تريد حذف $name? هذا الإجراء لا يمكن التراجع عنه.';
+  }
+
+  @override
+  String get location => 'الموقع';
+
+  @override
+  String get loadingAddress => 'جاري التحميل...';
+
+  @override
+  String get addressUnavailable => 'العنوان غير متوفر';
 }

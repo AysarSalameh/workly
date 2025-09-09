@@ -156,7 +156,7 @@
   "october": "October",
   "november": "November",
   "december": "December",
-  "totalWorkHours": "Total Work Hours",
+  "totalWorkHours": "Work Hours",
   "notCheckedOutYet": "Not checked out yet",
   "noLocation": "No location recorded",
   "locating": "Locating...",
@@ -206,7 +206,28 @@
   "enterHrEmail": "Please enter the HR email",
   "companyData": "Company Data",
   "companyEmail": "Company Email",
-  "enterCompanyEmail": "Please enter the company email"
+  "enterCompanyEmail": "Please enter the company email",
+  "noEmployeesFound": "No employees found",
+  "total": "Total",
+  "somethingWentWrong": "Something went wrong",
+  "tryAgain": "Try Again",
+  "employeeInformation": "Employee Information",
+  "viewId": "View ID",
+  "downloadId": "Download ID",
+  "loadingEmployees": "Loading Employees...",
+  "pleaseWaitWhileFetchingTeam": "Please wait while we fetch your team data",
+  "teamMembers": "Team Members",
+  "manageEmployees": "Manage your company employees",
+  "searchEmployees": "Search employees...",
+  "employeeStatus": "Employee Status",
+  "pendingReview": "Pending Review",
+  "deleted": "Deleted",
+  "confirmDelete": "Confirm Delete",
+  "delete": "Delete",
+  "deleteMessage": "Are you sure you want to delete {name}? This action cannot be undone.",
+  "location": "Location",
+  "loadingAddress": "Loading address...",
+  "addressUnavailable": "Address not available"
 }
 
 
