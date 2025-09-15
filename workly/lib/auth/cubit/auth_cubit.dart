@@ -128,6 +128,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<String> checkProfileCompletionByEmail(String email) async {
+    print("enter");
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Employee')
         .where('email', isEqualTo: email)

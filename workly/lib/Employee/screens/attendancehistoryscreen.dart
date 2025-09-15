@@ -54,8 +54,11 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen>
       'ديسمبر',
     ];
 
-    _selectedMonth = _months.first;
+    // نحسب الشهر الحالي
+    int currentMonthIndex = DateTime.now().month; // 1 - 12
+    _selectedMonth = _months[currentMonthIndex]; // نربطه مع اسم الشهر
   }
+
 
   @override
   void dispose() {
@@ -110,12 +113,6 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen>
     }
   }
 
-  bool _filterByMonth(DateTime date) {
-    if (_selectedMonth == null || _selectedMonth == _months[0]) return true;
-    final selectedIdx = _months.indexOf(_selectedMonth!);
-    return date.month == selectedIdx;
-  }
-
   String locMonthName(String month) {
     final loc = AppLocalizations.of(context)!;
     switch (month) {
@@ -166,6 +163,34 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen>
 
     final uid = user.email ?? user.uid;
 
+    // Build Stream according to selected month
+    Stream<QuerySnapshot> _attendanceStream() {
+      if (_selectedMonth == _months[0]) {
+        // "الكل"
+        return FirebaseFirestore.instance
+            .collection('Employee')
+            .doc(uid)
+            .collection('attendance')
+            .orderBy('date', descending: true)
+            .snapshots();
+      } else {
+        int monthIndex = _months.indexOf(_selectedMonth!);
+        DateTime now = DateTime.now();
+        DateTime startOfMonth = DateTime(now.year, monthIndex, 1);
+        DateTime endOfMonth =
+        DateTime(now.year, monthIndex + 1, 0, 23, 59, 59);
+
+        return FirebaseFirestore.instance
+            .collection('Employee')
+            .doc(uid)
+            .collection('attendance')
+            .where('date', isGreaterThanOrEqualTo: startOfMonth)
+            .where('date', isLessThanOrEqualTo: endOfMonth)
+            .orderBy('date', descending: true)
+            .snapshots();
+      }
+    }
+
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF121212) : const Color(0xF9F8FFFF),
       appBar: AppBar(
@@ -176,7 +201,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen>
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white : Colors.white,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
@@ -204,36 +229,24 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen>
                 final idx = _months.indexWhere(
                       (month) => locMonthName(month) == m,
                 );
-                if (idx != -1) setState(() => _selectedMonth = _months[idx]);
+                if (idx != -1) {
+                  setState(() => _selectedMonth = _months[idx]);
+                }
               },
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('Employee')
-                    .doc(uid)
-                    .collection('attendance')
-                    .orderBy('date', descending: true)
-                    .snapshots(),
+                stream: _attendanceStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const LoadingWidget();
                   } else if (snapshot.hasError) {
                     return ErrorWidget(loc.errorOccurred);
                   } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return EmptyWidget(msg: loc.noData);
-                  }
-
-                  final docs = snapshot.data!.docs.where((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    final checkInTs = data['checkIn'] as Timestamp?;
-                    if (checkInTs == null) return false;
-                    return _filterByMonth(checkInTs.toDate());
-                  }).toList();
-
-                  if (docs.isEmpty) {
                     return EmptyWidget(msg: loc.noRecordsInThisMonth);
                   }
+
+                  final docs = snapshot.data!.docs;
 
                   return ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

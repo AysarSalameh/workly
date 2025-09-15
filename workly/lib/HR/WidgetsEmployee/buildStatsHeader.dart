@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projects_flutter/HR/Widgets/buildStatItem.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee//buildStatItem.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart'; // ✅ استيراد الترجمات
 
 Widget buildStatsHeader(List<dynamic> employees, AppLocalizations loc) {

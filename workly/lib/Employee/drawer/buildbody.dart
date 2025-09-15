@@ -84,7 +84,7 @@ Widget buildBody(BuildContext context, AppLocalizations loc, String uid) {
                     const SizedBox(height: 12),
                     buildTimeRow(
                       loc.totalHours,
-                      "${today?.totalHours?.toStringAsFixed(2) ?? '--'} ${loc.hours}",
+                      today?.totalHours != null ? '${today!.totalHours!.floor()} ${loc.hours} ${((today.totalHours! - today.totalHours!.floor()) * 60).round()} ${loc.minutes}' : '--',
                       Icons.timer,
                       isDark ? Colors.tealAccent : const Color(0xFF667eea),
                     ),

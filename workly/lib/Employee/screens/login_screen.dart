@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.language, color: theme.iconTheme.color),
-            onPressed: () => context.read<LanguageCubit>().toggle(),
+            onPressed: () => context.read<LanguageCubit>().toggleLanguage(),
           ),
         ],
       ),
@@ -54,23 +54,27 @@ class _LoginScreenState extends State<LoginScreen> {
             final cubit = context.read<AuthCubit>();
             final status = await cubit.checkProfileCompletionByEmail(user.email!);
 
-            if (status == "incomplete") {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProfileScreen()));
-            } else if (status == "approved") {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()));
-            } else if (status == "pending") {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PendingScreen()));
-            } else if (status == "deleted") {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const RejectedScreen()));
-            }
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+
+              if (status == "incomplete") {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ProfileScreen()));
+              } else if (status == "approved") {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HomeScreen()));
+              } else if (status == "pending") {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const PendingScreen()));
+              } else if (status == "deleted") {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const RejectedScreen()));
+              }
+            });
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

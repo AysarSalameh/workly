@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projects_flutter/HR/EmployeeCubit/employeescubit.dart';
-import 'package:projects_flutter/HR/Widgets/buildEmployeesContent.dart';
-import 'package:projects_flutter/HR/Widgets/buildModernAppBar.dart';
+
+import 'package:projects_flutter/HR/WidgetsEmployee/buildEmployeesContent.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildModernAppBar.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
 class EmployeesPage extends StatefulWidget {
@@ -65,30 +64,27 @@ class _EmployeesPageState extends State<EmployeesPage>
       AppLocalizations.of(context)!.appending,
     ];
 
-    return BlocProvider(
-      create: (_) => EmployeesCubit()..fetchEmployees(widget.companyCode),
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        body: Column(
-          children: [
-            ModernAppBar(
-              onSearch: onSearch,
-              onFilterChanged: onFilterChanged,
-              filterOptions: _filterOptions,
-            ),
-            Expanded(
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: buildEmployeesContent(
-                  context: context,
-                  companyCode: widget.companyCode,
-                  searchQuery: _searchQuery,
-                  selectedFilter: _selectedFilter,
-                ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: Column(
+        children: [
+          ModernAppBar(
+            onSearch: onSearch,
+            onFilterChanged: onFilterChanged,
+            filterOptions: _filterOptions,
+          ),
+          Expanded(
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: buildEmployeesContent(
+                context: context,
+                companyCode: widget.companyCode,
+                searchQuery: _searchQuery,
+                selectedFilter: _selectedFilter,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

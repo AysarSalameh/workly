@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:projects_flutter/HR/EmployeeCubit/employeescubit.dart';
 import 'package:projects_flutter/HR/ModelsHR/Employee.dart';
-import 'package:projects_flutter/HR/Widgets/buildInfoGrid.dart';
-import 'package:projects_flutter/HR/Widgets/buildProfileImage.dart';
-import 'package:projects_flutter/HR/Widgets/buildStatusCard.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildInfoGrid.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildProfileImage.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildStatusCard.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
 class EmployeeDetailsPage extends StatefulWidget {
   final Employee employee;
-  final EmployeesCubit cubit;
 
   const EmployeeDetailsPage({
     super.key,
     required this.employee,
-    required this.cubit,
   });
 
   @override
@@ -56,7 +53,7 @@ class _EmployeeDetailsPageState extends State<EmployeeDetailsPage>
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(24, 40, 24, 16), // قلل padding فوق
+          padding: const EdgeInsets.fromLTRB(24, 40, 24, 16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -96,7 +93,7 @@ class _EmployeeDetailsPageState extends State<EmployeeDetailsPage>
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min, // مهم لتجنب overflow
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -127,7 +124,6 @@ class _EmployeeDetailsPageState extends State<EmployeeDetailsPage>
           ),
         ),
       ),
-
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: SingleChildScrollView(
@@ -141,7 +137,6 @@ class _EmployeeDetailsPageState extends State<EmployeeDetailsPage>
               const SizedBox(height: 24),
               StatusCard(
                 employee: emp,
-                cubit: widget.cubit,
                 initialStatus: selectedStatus,
               ),
               const SizedBox(height: 20),

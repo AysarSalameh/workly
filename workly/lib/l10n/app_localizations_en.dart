@@ -706,4 +706,184 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressUnavailable => 'Address not available';
+
+  @override
+  String get myEmployees => 'My Employees';
+
+  @override
+  String get attendance => 'Attendance';
+
+  @override
+  String get reports => 'Reports';
+
+  @override
+  String get managementSystem => 'Management System';
+
+  @override
+  String get hrManager => 'HR Manager';
+
+  @override
+  String get recentActivity => 'Recent Activity';
+
+  @override
+  String get lastCheckIn => 'Last Check-In';
+
+  @override
+  String get present => 'Present';
+
+  @override
+  String get absent => 'Absent';
+
+  @override
+  String get totalEmployees => 'Total Employees';
+
+  @override
+  String get approvedEmployees => 'Approved Employees';
+
+  @override
+  String get pendingEmployees => 'Pending Employees';
+
+  @override
+  String get filters => 'Filters';
+
+  @override
+  String get attendanceDetails => 'Attendance Details';
+
+  @override
+  String get actions => 'Actions';
+
+  @override
+  String get viewDetails => 'View Details';
+
+  @override
+  String get editAttendance => 'Edit Attendance';
+
+  @override
+  String get nocheckintoday => 'No check-in today';
+
+  @override
+  String get attendancetracker => 'Attendance Tracker';
+
+  @override
+  String get latitude => 'Latitude';
+
+  @override
+  String get longitude => 'Longitude';
+
+  @override
+  String get tapToOpenMap => 'Tap to open map';
+
+  @override
+  String get monthlyAttendance => 'Monthly Attendance';
+
+  @override
+  String get daysPresent => 'Days Present';
+
+  @override
+  String get daysAbsent => 'Days Absent';
+
+  @override
+  String get noCheckIn => 'No check-in';
+
+  @override
+  String get noCheckOut => 'No check-out';
+
+  @override
+  String get checkInLocation => 'Check-In Location';
+
+  @override
+  String get checkOutLocation => 'Check-Out Location';
+
+  @override
+  String get couldNotOpenMap => 'Could not open the map.';
+
+  @override
+  String get noAttendanceRecords => 'No attendance records found.';
+
+  @override
+  String get errorLoadingCompanyInfo => 'Error loading company info';
+
+  @override
+  String get notAvailable => 'Not Available';
+
+  @override
+  String get employeeName => 'Employee Name';
+
+  @override
+  String get exportPdf => 'Export PDF';
+
+  @override
+  String get dailyAttendanceLog => 'Daily Attendance Log';
+
+  @override
+  String get salaryRelease => 'Salary Release';
+
+  @override
+  String get ratePerHour => 'Rate Per Hour';
+
+  @override
+  String get employeesSalaries => 'Employees Salaries';
+
+  @override
+  String get manageSalaries => 'Manage Salaries';
+
+  @override
+  String get enterSalary => 'Enter Salary';
+
+  @override
+  String get releaseSalary => 'Release Salary';
+
+  @override
+  String get enterSalaryPerHours => 'Enter Salary Per Hours';
+
+  @override
+  String get enterValidNumber => 'Please enter a valid number';
+
+  @override
+  String get selectAll => 'Select All';
+
+  @override
+  String get deselectAll => 'Deselect All';
+
+  @override
+  String get salaryReleasedSuccessfully => 'Salary released successfully';
+
+  @override
+  String get salaryPageTitle => 'Employee Salaries';
+
+  @override
+  String get searchByNameOrEmail => 'Search by name or email';
+
+  @override
+  String get hourRate => 'Hourly Rate';
+
+  @override
+  String get paid => 'Paid';
+
+  @override
+  String get salary => 'Salary';
+
+  @override
+  String get release => 'Release';
+
+  @override
+  String get selectAtLeastOneEmployee => 'Please select at least one employee';
+
+  @override
+  String get chooseMonth => 'Choose Month';
+
+  @override
+  String get totalAmount => 'Total Amount';
+
+  @override
+  String get salariesSavedSuccess => 'Salaries saved successfully';
+
+  @override
+  String get salariesSavedError => 'Error while saving: ';
+
+  @override
+  String get saveAndReleaseSalaries => 'Save and Release Salaries';
+
+  @override
+  String get salaryPreview => 'Salary Preview';
 }

@@ -109,7 +109,7 @@ class _HrRegisterScreenState extends State<HrRegisterScreen> {
                                   onPressed: () => Navigator.pop(context),
                                 ),
                                 TextButton(
-                                  onPressed: () => context.read<LanguageCubit>().toggle(),
+                                  onPressed: () => context.read<LanguageCubit>().toggleLanguage(),
                                   child: const Icon(Icons.language),
                                 ),
                               ],

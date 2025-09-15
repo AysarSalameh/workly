@@ -622,7 +622,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get saving => 'جاري الحفظ...';
 
   @override
-  String get hrName => 'اسم المدير (HR)';
+  String get hrName => 'اسم المدير ';
 
   @override
   String get enterHrName => 'يرجى إدخال اسم المدير';
@@ -707,4 +707,184 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addressUnavailable => 'العنوان غير متوفر';
+
+  @override
+  String get myEmployees => 'موظفوني';
+
+  @override
+  String get attendance => 'الحضور';
+
+  @override
+  String get reports => 'التقارير';
+
+  @override
+  String get managementSystem => 'نظام الإدارة';
+
+  @override
+  String get hrManager => 'مدير الموارد البشرية';
+
+  @override
+  String get recentActivity => 'النشاط الأخير';
+
+  @override
+  String get lastCheckIn => 'آخر تسجيل دخول';
+
+  @override
+  String get present => 'حاضر';
+
+  @override
+  String get absent => 'غائب';
+
+  @override
+  String get totalEmployees => 'إجمالي الموظفين';
+
+  @override
+  String get approvedEmployees => 'الموظفون الموافق عليهم';
+
+  @override
+  String get pendingEmployees => 'الموظفون قيد الانتظار';
+
+  @override
+  String get filters => 'الفلاتر';
+
+  @override
+  String get attendanceDetails => 'تفاصيل الحضور';
+
+  @override
+  String get actions => 'الإجراءات';
+
+  @override
+  String get viewDetails => 'عرض التفاصيل';
+
+  @override
+  String get editAttendance => 'تعديل الحضور';
+
+  @override
+  String get nocheckintoday => 'لا يوجد تسجيل دخول اليوم';
+
+  @override
+  String get attendancetracker => 'متتبع الحضور';
+
+  @override
+  String get latitude => 'خط العرض';
+
+  @override
+  String get longitude => 'خط الطول';
+
+  @override
+  String get tapToOpenMap => 'اضغط هنا لفتح الخريطة';
+
+  @override
+  String get monthlyAttendance => 'الحضور الشهري';
+
+  @override
+  String get daysPresent => 'أيام الحضور';
+
+  @override
+  String get daysAbsent => 'أيام الغياب';
+
+  @override
+  String get noCheckIn => 'لم يتم تسجيل الحضور';
+
+  @override
+  String get noCheckOut => 'لم يتم تسجيل الانصراف';
+
+  @override
+  String get checkInLocation => 'موقع تسجيل الحضور';
+
+  @override
+  String get checkOutLocation => 'موقع تسجيل الانصراف';
+
+  @override
+  String get couldNotOpenMap => 'تعذر فتح الخريطة.';
+
+  @override
+  String get noAttendanceRecords => 'لا توجد سجلات حضور.';
+
+  @override
+  String get errorLoadingCompanyInfo => 'خطأ في جلب بيانات الشركة';
+
+  @override
+  String get notAvailable => 'غير متوفر';
+
+  @override
+  String get employeeName => 'اسم الموظف';
+
+  @override
+  String get exportPdf => 'تصدير PDF';
+
+  @override
+  String get dailyAttendanceLog => 'سجل الحضور اليومي';
+
+  @override
+  String get salaryRelease => 'إصدار رواتب';
+
+  @override
+  String get ratePerHour => 'الاجر بالساعة';
+
+  @override
+  String get employeesSalaries => 'رواتب الموظفين';
+
+  @override
+  String get manageSalaries => 'إدارة الرواتب';
+
+  @override
+  String get enterSalary => 'أدخل الراتب';
+
+  @override
+  String get releaseSalary => 'إصدار الراتب';
+
+  @override
+  String get enterSalaryPerHours => 'أدخل الراتب بالساعه';
+
+  @override
+  String get enterValidNumber => 'الرجاء إدخال رقم صحيح';
+
+  @override
+  String get selectAll => 'تحديد الكل';
+
+  @override
+  String get deselectAll => 'إلغاء التحديد';
+
+  @override
+  String get salaryReleasedSuccessfully => 'تم إصدار الرواتب بنجاح';
+
+  @override
+  String get salaryPageTitle => 'رواتب الموظفين';
+
+  @override
+  String get searchByNameOrEmail => 'ابحث بالاسم أو البريد الإلكتروني';
+
+  @override
+  String get hourRate => 'الأجر بالساعة';
+
+  @override
+  String get paid => 'مدفوع';
+
+  @override
+  String get salary => 'الراتب';
+
+  @override
+  String get release => 'إصدار';
+
+  @override
+  String get selectAtLeastOneEmployee => 'يرجى اختيار موظف واحد على الأقل';
+
+  @override
+  String get chooseMonth => 'اختر الشهر';
+
+  @override
+  String get totalAmount => 'إجمالي المبلغ';
+
+  @override
+  String get salariesSavedSuccess => 'تم حفظ الرواتب بنجاح';
+
+  @override
+  String get salariesSavedError => 'خطأ أثناء الحفظ: ';
+
+  @override
+  String get saveAndReleaseSalaries => 'حفظ وإصدار الرواتب';
+
+  @override
+  String get salaryPreview => 'معاينة إصدار الرواتب';
 }

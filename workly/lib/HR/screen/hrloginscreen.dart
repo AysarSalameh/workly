@@ -55,12 +55,11 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                 .collection('companies')
                 .doc(uid)
                 .get();
-
+            if (!mounted) return;
             if (doc.exists) {
-              // بيانات الشركة موجودة -> اذهب للوحة التحكم مباشرة
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) =>  HrDashboardScreen()),
+                MaterialPageRoute(builder: (_) => HrDashboardScreen()),
               );
             } else {
               // بيانات الشركة غير موجودة -> اذهب لشاشة تعبئة بيانات الشركة
@@ -106,7 +105,9 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                           width: isWeb ? 450 : screenWidth * 0.9,
                           padding: const EdgeInsets.all(32),
                           margin: const EdgeInsets.symmetric(
-                              vertical: 32, horizontal: 16),
+                            vertical: 32,
+                            horizontal: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -126,8 +127,9 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                 alignment: Alignment.topRight,
                                 child: IconButton(
                                   icon: const Icon(Icons.language),
-                                  onPressed: () =>
-                                      context.read<LanguageCubit>().toggle(),
+                                  onPressed: () => context
+                                      .read<LanguageCubit>()
+                                      .toggleLanguage(),
                                 ),
                               ),
 
@@ -136,26 +138,37 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                 width: 80,
                                 height: 80,
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                    Colors.blue.shade600,
-                                    Colors.indigo.shade600
-                                  ]),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue.shade600,
+                                      Colors.indigo.shade600,
+                                    ],
+                                  ),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: const Icon(Icons.business_center,
-                                    color: Colors.white, size: 40),
+                                child: const Icon(
+                                  Icons.business_center,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
                               ),
                               const SizedBox(height: 24),
-                              Text(loc.hrPortal,
-                                  style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey.shade800)),
+                              Text(
+                                loc.hrPortal,
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
                               const SizedBox(height: 8),
-                              Text(loc.hrLogin,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey.shade600)),
+                              Text(
+                                loc.hrLogin,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
                               const SizedBox(height: 32),
 
                               Form(
@@ -167,25 +180,34 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       controller: emailController,
                                       keyboardType: TextInputType.emailAddress,
                                       validator: (value) {
-                                        if (value == null || value.isEmpty)
+                                        if (value == null || value.isEmpty) {
                                           return loc.enterEmail;
-                                        if (!value.contains('@'))
+                                        }
+                                        if (!value.contains('@')) {
                                           return loc.enterValidEmail;
+                                        }
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         labelText: loc.email,
-                                        prefixIcon: Icon(Icons.email_outlined,
-                                            color: Colors.blue.shade600),
+                                        prefixIcon: Icon(
+                                          Icons.email_outlined,
+                                          color: Colors.blue.shade600,
+                                        ),
                                         border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(12)),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: Colors.blue.shade600,
-                                                width: 2)),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.blue.shade600,
+                                            width: 2,
+                                          ),
+                                        ),
                                         filled: true,
                                         fillColor: Colors.grey.shade50,
                                       ),
@@ -197,33 +219,43 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       controller: passwordController,
                                       obscureText: !_isPasswordVisible,
                                       validator: (value) {
-                                        if (value == null || value.isEmpty)
+                                        if (value == null || value.isEmpty) {
                                           return loc.enterPassword;
+                                        }
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         labelText: loc.password,
-                                        prefixIcon: Icon(Icons.lock_outlined,
-                                            color: Colors.blue.shade600),
+                                        prefixIcon: Icon(
+                                          Icons.lock_outlined,
+                                          color: Colors.blue.shade600,
+                                        ),
                                         suffixIcon: IconButton(
                                           icon: Icon(
-                                              _isPasswordVisible
-                                                  ? Icons.visibility_off
-                                                  : Icons.visibility,
-                                              color: Colors.grey.shade600),
-                                          onPressed: () => setState(() =>
-                                          _isPasswordVisible =
-                                          !_isPasswordVisible),
+                                            _isPasswordVisible
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: Colors.grey.shade600,
+                                          ),
+                                          onPressed: () => setState(
+                                            () => _isPasswordVisible =
+                                                !_isPasswordVisible,
+                                          ),
                                         ),
                                         border: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(12)),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: Colors.blue.shade600,
-                                                width: 2)),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.blue.shade600,
+                                            width: 2,
+                                          ),
+                                        ),
                                         filled: true,
                                         fillColor: Colors.grey.shade50,
                                       ),
@@ -238,29 +270,34 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                         onPressed: isLoading
                                             ? null
                                             : () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            cubit.loginWithEmail(
-                                                emailController.text
-                                                    .trim(),
-                                                passwordController.text
-                                                    .trim());
-                                          }
-                                        },
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  cubit.loginWithEmail(
+                                                    emailController.text.trim(),
+                                                    passwordController.text
+                                                        .trim(),
+                                                  );
+                                                }
+                                              },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade600,
                                           shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(12)),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
                                         ),
                                         child: isLoading
                                             ? const CircularProgressIndicator(
-                                            color: Colors.white)
-                                            : Text(loc.login,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight:
-                                                FontWeight.w600)),
+                                                color: Colors.white,
+                                              )
+                                            : Text(
+                                                loc.login,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
                                       ),
                                     ),
                                     const SizedBox(height: 16),
@@ -271,27 +308,36 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       height: 50,
                                       child: OutlinedButton.icon(
                                         icon: Image.asset(
-                                            'assets/images/google_logo.png',
-                                            height: 22,
-                                            width: 22,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Icon(Icons.login,
-                                                  color: Theme.of(context)
-                                                      .iconTheme
-                                                      .color);
-                                            }),
-                                        label: Text(loc.continueWithGoogle,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
+                                          'assets/images/google_logo.png',
+                                          height: 22,
+                                          width: 22,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return Icon(
+                                                  Icons.login,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).iconTheme.color,
+                                                );
+                                              },
+                                        ),
+                                        label: Text(
+                                          loc.continueWithGoogle,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
                                         style: OutlinedButton.styleFrom(
                                           side: BorderSide(
-                                              color:
-                                              Theme.of(context).dividerColor),
+                                            color: Theme.of(
+                                              context,
+                                            ).dividerColor,
+                                          ),
                                           shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(12)),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
                                         ),
                                         onPressed: isLoading
                                             ? null
@@ -305,22 +351,30 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                       width: double.infinity,
                                       height: 50,
                                       child: OutlinedButton.icon(
-                                        icon: Icon(Icons.apple,
-                                            color: Theme.of(context)
-                                                .iconTheme
-                                                .color,
-                                            size: 22),
-                                        label: Text(loc.continueWithApple,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
+                                        icon: Icon(
+                                          Icons.apple,
+                                          color: Theme.of(
+                                            context,
+                                          ).iconTheme.color,
+                                          size: 22,
+                                        ),
+                                        label: Text(
+                                          loc.continueWithApple,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
                                         style: OutlinedButton.styleFrom(
                                           side: BorderSide(
-                                              color:
-                                              Theme.of(context).dividerColor),
+                                            color: Theme.of(
+                                              context,
+                                            ).dividerColor,
+                                          ),
                                           shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(12)),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
                                         ),
                                         onPressed: isLoading
                                             ? null
@@ -333,14 +387,19 @@ class _HrLoginScreenState extends State<HrLoginScreen> {
                                     TextButton(
                                       onPressed: () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                const HrRegisterScreen()));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const HrRegisterScreen(),
+                                          ),
+                                        );
                                       },
-                                      child: Text(loc.createNewAccount,
-                                          style:
-                                          const TextStyle(color: Colors.grey)),
+                                      child: Text(
+                                        loc.createNewAccount,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -51,6 +51,11 @@ dependencies:
   geocoding: ^4.0.0
   google_fonts: ^6.3.1
   file_picker: ^10.3.2
+  shared_preferences: ^2.5.3
+  faker: ^2.2.0
+  pdf: ^3.11.3
+  printing: ^5.14.2
+  month_picker_dialog: ^6.5.0
 
 
 dev_dependencies:

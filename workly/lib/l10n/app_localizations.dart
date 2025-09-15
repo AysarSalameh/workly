@@ -1459,6 +1459,366 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Address not available'**
   String get addressUnavailable;
+
+  /// No description provided for @myEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'My Employees'**
+  String get myEmployees;
+
+  /// No description provided for @attendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance'**
+  String get attendance;
+
+  /// No description provided for @reports.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get reports;
+
+  /// No description provided for @managementSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Management System'**
+  String get managementSystem;
+
+  /// No description provided for @hrManager.
+  ///
+  /// In en, this message translates to:
+  /// **'HR Manager'**
+  String get hrManager;
+
+  /// No description provided for @recentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get recentActivity;
+
+  /// No description provided for @lastCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Check-In'**
+  String get lastCheckIn;
+
+  /// No description provided for @present.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get present;
+
+  /// No description provided for @absent.
+  ///
+  /// In en, this message translates to:
+  /// **'Absent'**
+  String get absent;
+
+  /// No description provided for @totalEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Employees'**
+  String get totalEmployees;
+
+  /// No description provided for @approvedEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved Employees'**
+  String get approvedEmployees;
+
+  /// No description provided for @pendingEmployees.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Employees'**
+  String get pendingEmployees;
+
+  /// No description provided for @filters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filters;
+
+  /// No description provided for @attendanceDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Details'**
+  String get attendanceDetails;
+
+  /// No description provided for @actions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get actions;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get viewDetails;
+
+  /// No description provided for @editAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Attendance'**
+  String get editAttendance;
+
+  /// No description provided for @nocheckintoday.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-in today'**
+  String get nocheckintoday;
+
+  /// No description provided for @attendancetracker.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendance Tracker'**
+  String get attendancetracker;
+
+  /// No description provided for @latitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude'**
+  String get latitude;
+
+  /// No description provided for @longitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Longitude'**
+  String get longitude;
+
+  /// No description provided for @tapToOpenMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open map'**
+  String get tapToOpenMap;
+
+  /// No description provided for @monthlyAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Attendance'**
+  String get monthlyAttendance;
+
+  /// No description provided for @daysPresent.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Present'**
+  String get daysPresent;
+
+  /// No description provided for @daysAbsent.
+  ///
+  /// In en, this message translates to:
+  /// **'Days Absent'**
+  String get daysAbsent;
+
+  /// No description provided for @noCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-in'**
+  String get noCheckIn;
+
+  /// No description provided for @noCheckOut.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-out'**
+  String get noCheckOut;
+
+  /// No description provided for @checkInLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-In Location'**
+  String get checkInLocation;
+
+  /// No description provided for @checkOutLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-Out Location'**
+  String get checkOutLocation;
+
+  /// No description provided for @couldNotOpenMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the map.'**
+  String get couldNotOpenMap;
+
+  /// No description provided for @noAttendanceRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'No attendance records found.'**
+  String get noAttendanceRecords;
+
+  /// No description provided for @errorLoadingCompanyInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading company info'**
+  String get errorLoadingCompanyInfo;
+
+  /// No description provided for @notAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Available'**
+  String get notAvailable;
+
+  /// No description provided for @employeeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Name'**
+  String get employeeName;
+
+  /// No description provided for @exportPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF'**
+  String get exportPdf;
+
+  /// No description provided for @dailyAttendanceLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Attendance Log'**
+  String get dailyAttendanceLog;
+
+  /// No description provided for @salaryRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary Release'**
+  String get salaryRelease;
+
+  /// No description provided for @ratePerHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Per Hour'**
+  String get ratePerHour;
+
+  /// No description provided for @employeesSalaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Employees Salaries'**
+  String get employeesSalaries;
+
+  /// No description provided for @manageSalaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Salaries'**
+  String get manageSalaries;
+
+  /// No description provided for @enterSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Salary'**
+  String get enterSalary;
+
+  /// No description provided for @releaseSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Release Salary'**
+  String get releaseSalary;
+
+  /// No description provided for @enterSalaryPerHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Salary Per Hours'**
+  String get enterSalaryPerHours;
+
+  /// No description provided for @enterValidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number'**
+  String get enterValidNumber;
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get selectAll;
+
+  /// No description provided for @deselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get deselectAll;
+
+  /// No description provided for @salaryReleasedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary released successfully'**
+  String get salaryReleasedSuccessfully;
+
+  /// No description provided for @salaryPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Salaries'**
+  String get salaryPageTitle;
+
+  /// No description provided for @searchByNameOrEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or email'**
+  String get searchByNameOrEmail;
+
+  /// No description provided for @hourRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hourly Rate'**
+  String get hourRate;
+
+  /// No description provided for @paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paid;
+
+  /// No description provided for @salary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get salary;
+
+  /// No description provided for @release.
+  ///
+  /// In en, this message translates to:
+  /// **'Release'**
+  String get release;
+
+  /// No description provided for @selectAtLeastOneEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one employee'**
+  String get selectAtLeastOneEmployee;
+
+  /// No description provided for @chooseMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Month'**
+  String get chooseMonth;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get totalAmount;
+
+  /// No description provided for @salariesSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Salaries saved successfully'**
+  String get salariesSavedSuccess;
+
+  /// No description provided for @salariesSavedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error while saving: '**
+  String get salariesSavedError;
+
+  /// No description provided for @saveAndReleaseSalaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and Release Salaries'**
+  String get saveAndReleaseSalaries;
+
+  /// No description provided for @salaryPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary Preview'**
+  String get salaryPreview;
 }
 
 class _AppLocalizationsDelegate

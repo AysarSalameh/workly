@@ -16,6 +16,10 @@ class Employee {
   final Timestamp createdAt;
   final String idImage;
 
+  // الحقول الجديدة
+  final DateTime? lastCheckIn;
+  final double? ratePerHour;    // الأجر بالساعة
+
   Employee({
     required this.id,
     required this.name,
@@ -31,9 +35,10 @@ class Employee {
     required this.companyLng,
     required this.createdAt,
     required this.idImage,
+    this.lastCheckIn,
+    this.ratePerHour,
   });
 
-  // إنشاء نسخة جديدة مع إمكانية تعديل بعض الحقول
   Employee copyWith({
     String? id,
     String? hrStatus,
@@ -47,9 +52,11 @@ class Employee {
     double? companyLat,
     double? companyLng,
     String? idImage,
+    DateTime? lastCheckIn,
+    double? ratePerHour,
   }) {
     return Employee(
-      id: this.id,
+      id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -63,6 +70,8 @@ class Employee {
       companyLng: companyLng ?? this.companyLng,
       createdAt: createdAt,
       idImage: idImage ?? this.idImage,
+      lastCheckIn: lastCheckIn ?? this.lastCheckIn,
+      ratePerHour: ratePerHour ?? this.ratePerHour,
     );
   }
 
@@ -70,7 +79,7 @@ class Employee {
   factory Employee.fromDoc(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
     return Employee(
-      id: data['Id'] ?? 'No Id', // رقم الهوية الفعلي
+      id: data['Id'] ?? 'No Id',
       name: data['name'] ?? 'No Name',
       email: data['email'] ?? '',
       phoneNumber: data['phoneNumber'] ?? '',
@@ -84,14 +93,20 @@ class Employee {
       companyLng: (data['companyLng'] ?? 0).toDouble(),
       createdAt: data['createdAt'] ?? Timestamp.now(),
       idImage: data['idImage'] ?? '',
+      lastCheckIn: (data['lastCheckIn'] != null)
+          ? (data['lastCheckIn'] as Timestamp).toDate()
+          : null,
+      ratePerHour: (data['ratePerHour'] ?? 0).toDouble(),
     );
   }
 
-
-  // تحويل لكائن Map (لرفع أو تحديث البيانات)
+  @override
+  String toString() {
+    return 'Employee{id: $id, name: $name, email: $email, phoneNumber: $phoneNumber, iban: $iban, address: $address, birthDate: $birthDate, hrStatus: $hrStatus, profileImage: $profileImage, companyCode: $companyCode, companyLat: $companyLat, companyLng: $companyLng, createdAt: $createdAt, idImage: $idImage, lastCheckIn: $lastCheckIn, ratePerHour: $ratePerHour}';
+  } // تحويل لكائن Map (لرفع أو تحديث البيانات)
   Map<String, dynamic> toMap() {
     return {
-      'Id':id,
+      'Id': id,
       'name': name,
       'email': email,
       'phoneNumber': phoneNumber,
@@ -105,6 +120,8 @@ class Employee {
       'companyLng': companyLng,
       'createdAt': createdAt,
       'idImage': idImage,
+      'lastCheckIn': lastCheckIn != null ? Timestamp.fromDate(lastCheckIn!) : null,
+      'ratePerHour': ratePerHour,
     };
   }
 }

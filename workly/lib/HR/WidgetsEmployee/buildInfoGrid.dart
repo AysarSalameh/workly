@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';// استدعاء ملف الترجمات
-import 'package:projects_flutter/HR/Widgets/EmployeeLocationRow.dart';
-import 'package:projects_flutter/HR/Widgets/buildInfoRow.dart';
+import 'package:flutter/material.dart'; // استدعاء ملف الترجمات
+import 'package:intl/intl.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee//EmployeeLocationRow.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee//buildInfoRow.dart';
 import 'package:projects_flutter/HR/ModelsHR/Employee.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,11 +38,25 @@ Widget buildInfoGrid(BuildContext context, Employee emp) {
           children: [
             buildInfoRow(loc.idNumber, emp.id, Icons.badge_outlined),
             buildInfoRow(loc.email, emp.email, Icons.email_outlined),
-            buildInfoRow(loc.phoneNumber, emp.phoneNumber, Icons.phone_outlined),
+            buildInfoRow(
+              loc.phoneNumber,
+              emp.phoneNumber,
+              Icons.phone_outlined,
+            ),
             buildInfoRow(loc.iban, emp.iban, Icons.account_balance_outlined),
             buildInfoRow(loc.address, emp.address, Icons.location_on_outlined),
-            buildInfoRow(loc.birthDate, emp.birthDate, Icons.cake_outlined),
-            buildInfoRow(loc.companyCode, emp.companyCode, Icons.business_outlined),
+            buildInfoRow(
+              loc.birthDate,
+              formatBirthDateFlexible(emp.birthDate),
+              Icons.cake_outlined,
+            ),
+
+
+            buildInfoRow(
+              loc.companyCode,
+              emp.companyCode,
+              Icons.business_outlined,
+            ),
             // buildInfoRow(
             //   loc.location,
             //   "Lat: ${emp.companyLat}, Lng: ${emp.companyLat}",
@@ -69,7 +84,11 @@ Widget buildInfoGrid(BuildContext context, Employee emp) {
                                 emp.idImage!,
                                 fit: BoxFit.contain,
                                 errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error_outline, size: 60, color: Colors.red),
+                                    const Icon(
+                                      Icons.error_outline,
+                                      size: 60,
+                                      color: Colors.red,
+                                    ),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -77,7 +96,10 @@ Widget buildInfoGrid(BuildContext context, Employee emp) {
                               onPressed: () async {
                                 final url = Uri.parse(emp.idImage!);
                                 if (await canLaunchUrl(url)) {
-                                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                                  await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  );
                                 }
                               },
                               icon: const Icon(Icons.download),
@@ -100,12 +122,19 @@ Widget buildInfoGrid(BuildContext context, Employee emp) {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.badge_outlined, size: 18, color: Colors.blueAccent),
+                      const Icon(
+                        Icons.badge_outlined,
+                        size: 18,
+                        color: Colors.blueAccent,
+                      ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Text(
                           loc.viewId, // 🔹 قابل للترجمة
-                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                       const Icon(Icons.open_in_new, color: Colors.blueAccent),
@@ -118,4 +147,41 @@ Widget buildInfoGrid(BuildContext context, Employee emp) {
       ],
     ),
   );
+}
+
+String formatBirthDateFlexible(String? dateStr) {
+  if (dateStr == null || dateStr.isEmpty) return '--';
+
+  DateTime? dt;
+
+  // نجرب تحويل مباشرة باستخدام DateTime.parse
+  try {
+    dt = DateTime.parse(dateStr);
+  } catch (_) {
+    dt = null;
+  }
+
+  // إذا ما نجح، نجرب صيغة dd/MM/yyyy
+  if (dt == null) {
+    try {
+      dt = DateFormat('dd/MM/yyyy').parse(dateStr);
+    } catch (_) {
+      dt = null;
+    }
+  }
+
+  // إذا ما نجح، نجرب صيغة MM/dd/yyyy
+  if (dt == null) {
+    try {
+      dt = DateFormat('MM/dd/yyyy').parse(dateStr);
+    } catch (_) {
+      dt = null;
+    }
+  }
+
+  // إذا فشل كل شيء، نرجع '--'
+  if (dt == null) return '--';
+
+  // ترجع التاريخ بصيغة yyyy-MM-dd
+  return DateFormat('yyyy-MM-dd').format(dt);
 }

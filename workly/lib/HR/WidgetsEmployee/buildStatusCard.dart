@@ -4,16 +4,13 @@ import 'package:projects_flutter/HR/ModelsHR/Employee.dart';
 import 'package:projects_flutter/HR/EmployeeCubit/employeescubit.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
-
 class StatusCard extends StatefulWidget {
   final Employee employee;
-  final EmployeesCubit cubit;
   final String initialStatus;
 
   const StatusCard({
     Key? key,
     required this.employee,
-    required this.cubit,
     required this.initialStatus,
   }) : super(key: key);
 
@@ -33,6 +30,7 @@ class _StatusCardState extends State<StatusCard> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final cubit = context.read<EmployeesCubit>();
 
     Color statusColor;
     IconData statusIcon;
@@ -179,14 +177,14 @@ class _StatusCardState extends State<StatusCard> {
                       );
 
                       if (confirm == true) {
-                        await widget.cubit.deleteEmployee(widget.employee.email);
+                        await cubit.deleteEmployee(widget.employee.email);
                         if (mounted) Navigator.pop(context);
                       }
                     } else {
                       setState(() {
                         selectedStatus = newStatus;
                       });
-                      widget.cubit.updateStatus(widget.employee.email, newStatus);
+                      cubit.updateStatus(widget.employee.email, newStatus);
                     }
                   }
                 },

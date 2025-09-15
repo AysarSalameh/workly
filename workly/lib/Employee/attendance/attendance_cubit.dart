@@ -19,9 +19,13 @@ class AttendanceCubit extends Cubit<AttendanceState> {
     const R = 6371000; // meter
     final dLat = (lat2 - lat1) * pi / 180;
     final dLon = (lon2 - lon1) * pi / 180;
-    final a = sin(dLat/2)*sin(dLat/2) +
-        cos(lat1*pi/180)*cos(lat2*pi/180)*sin(dLon/2)*sin(dLon/2);
-    final c = 2 * atan2(sqrt(a), sqrt(1-a));
+    final a =
+        sin(dLat / 2) * sin(dLat / 2) +
+        cos(lat1 * pi / 180) *
+            cos(lat2 * pi / 180) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return R * c;
   }
 
@@ -42,6 +46,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
     );
     return (lat: pos.latitude, lng: pos.longitude);
   }
+
   Future<void> updateLocation({required String uid}) async {
     try {
       emit(AttendanceLoading());
@@ -59,21 +64,31 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       // 2) Get current location
       final current = await _getCurrentLocation();
       if (current == null) {
-        emit(AttendanceError('Location permission not granted or GPS disabled.'));
+        emit(
+          AttendanceError('Location permission not granted or GPS disabled.'),
+        );
         return;
       }
 
       // 3) Check if within office radius
       bool withinOffice = false;
       if (officeLat != null && officeLng != null) {
-        final d = _distanceInMeters(current.lat, current.lng, officeLat, officeLng);
+        final d = _distanceInMeters(
+          current.lat,
+          current.lng,
+          officeLat,
+          officeLng,
+        );
         withinOffice = d <= 200;
       }
 
       // 4) Reload today's attendance without modifying check-in/out
       final docId = _todayDocId(DateTime.now());
-      final todayRef = _db.collection('Employee').doc(uid)
-          .collection('attendance').doc(docId);
+      final todayRef = _db
+          .collection('Employee')
+          .doc(uid)
+          .collection('attendance')
+          .doc(docId);
       final snap = await todayRef.get();
       AttendanceModel? today;
       if (snap.exists) {
@@ -81,7 +96,9 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         DateTime? toDate(dynamic v) =>
             v == null ? null : (v is Timestamp ? v.toDate() : v as DateTime);
         today = AttendanceModel(
-          date: (data['date'] is Timestamp) ? (data['date'] as Timestamp).toDate() : DateTime.now(),
+          date: (data['date'] is Timestamp)
+              ? (data['date'] as Timestamp).toDate()
+              : DateTime.now(),
           checkIn: toDate(data['checkIn']),
           checkOut: toDate(data['checkOut']),
           totalHours: (data['totalHours'] as num?)?.toDouble(),
@@ -121,14 +138,22 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       final current = await _getCurrentLocation();
       bool withinOffice = false;
       if (current != null && officeLat != null && officeLng != null) {
-        final d = _distanceInMeters(current.lat, current.lng, officeLat, officeLng);
+        final d = _distanceInMeters(
+          current.lat,
+          current.lng,
+          officeLat,
+          officeLng,
+        );
         withinOffice = d <= 200; // 200 meters radius allowed
       }
 
       // 3) Fetch today's attendance document
       final docId = _todayDocId(DateTime.now());
-      final todayRef = _db.collection('Employee').doc(uid)
-          .collection('attendance').doc(docId);
+      final todayRef = _db
+          .collection('Employee')
+          .doc(uid)
+          .collection('attendance')
+          .doc(docId);
       final snap = await todayRef.get();
       AttendanceModel? today;
       if (snap.exists) {
@@ -136,7 +161,9 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         DateTime? toDate(dynamic v) =>
             v == null ? null : (v is Timestamp ? v.toDate() : v as DateTime);
         today = AttendanceModel(
-          date: (data['date'] is Timestamp) ? (data['date'] as Timestamp).toDate() : DateTime.now(),
+          date: (data['date'] is Timestamp)
+              ? (data['date'] as Timestamp).toDate()
+              : DateTime.now(),
           checkIn: toDate(data['checkIn']),
           checkOut: toDate(data['checkOut']),
           totalHours: (data['totalHours'] as num?)?.toDouble(),
@@ -156,8 +183,10 @@ class AttendanceCubit extends Cubit<AttendanceState> {
     try {
       emit(AttendanceLoading());
 
-      // Get company location from employee document
-      final empDoc = await _db.collection('Employee').doc(uid).get();
+      // جلب معلومات الموظف
+      final empDocRef = _db.collection('Employee').doc(uid);
+      final empDoc = await empDocRef.get();
+
       final officeLat = (empDoc['companyLat'] as num?)?.toDouble();
       final officeLng = (empDoc['companyLng'] as num?)?.toDouble();
 
@@ -167,27 +196,37 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         return;
       }
 
-      // Enforce proximity check
+      // تحقق من المسافة
       if (officeLat != null && officeLng != null) {
-        final d = _distanceInMeters(current.lat, current.lng, officeLat, officeLng);
-        if (d > 200) {
-          emit(AttendanceError('You are outside the company radius (distance ${d.toStringAsFixed(0)} m).'));
+        final distance = _distanceInMeters(
+          current.lat,
+          current.lng,
+          officeLat,
+          officeLng,
+        );
+        if (distance > 200) {
+          emit(
+            AttendanceError(
+              'You are outside the company radius (${distance.toStringAsFixed(0)} m).',
+            ),
+          );
           return;
         }
       }
 
       final now = DateTime.now();
-      final docId = _todayDocId(now);
-      final todayRef = _db.collection('Employee').doc(uid)
-          .collection('attendance').doc(docId);
+      final docId = _todayDocId(now); // مثلا "2025-09-11"
 
+      final todayRef = empDocRef.collection('attendance').doc(docId);
       final snap = await todayRef.get();
-      if (snap.exists && (snap.data()?['checkIn'] != null)) {
-        // Already checked in
+
+      if (snap.exists && snap.data()?['checkIn'] != null) {
+        // الموظف سجل حضور اليوم بالفعل
         await loadToday(uid: uid);
         return;
       }
 
+      // تسجيل الحضور
       await todayRef.set({
         'date': DateTime(now.year, now.month, now.day),
         'checkIn': now,
@@ -197,6 +236,12 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         'checkOutLat': null,
         'checkOutLng': null,
         'totalHours': null,
+      }, SetOptions(merge: true));
+
+      // تحديث آخر حضور في document الموظف نفسه
+      await empDocRef.set({
+        'lastCheckIn': now,
+        'totalHours': null, // يمكن تحديثها بعد الـ checkout
       }, SetOptions(merge: true));
 
       await loadToday(uid: uid);
@@ -209,11 +254,25 @@ class AttendanceCubit extends Cubit<AttendanceState> {
     try {
       emit(AttendanceLoading());
 
-      final current = await _getCurrentLocation();
       final now = DateTime.now();
-      final docId = _todayDocId(now);
-      final todayRef = _db.collection('Employee').doc(uid)
-          .collection('attendance').doc(docId);
+
+      // جلب بيانات الموظف (منها companyCode)
+      final empDocRef = _db.collection('Employee').doc(uid);
+      final empDoc = await empDocRef.get();
+      if (!empDoc.exists) {
+        emit(AttendanceError('Employee not found'));
+        return;
+      }
+
+      final empData = empDoc.data()!;
+      final companyCode = empData['companyCode'] as String? ?? 'unknown';
+
+      // جلب الموقع الحالي
+      final current = await _getCurrentLocation();
+
+      // --- تحديث حضور اليوم ---
+      final docId = DateFormat('yyyy-MM-dd').format(now);
+      final todayRef = empDocRef.collection('attendance').doc(docId);
 
       final snap = await todayRef.get();
       if (!snap.exists || snap.data()?['checkIn'] == null) {
@@ -225,6 +284,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       final DateTime checkInTime = (data['checkIn'] as Timestamp).toDate();
       final double hours = now.difference(checkInTime).inMinutes / 60.0;
 
+      // حفظ بيانات اليوم
       await todayRef.set({
         'checkOut': now,
         'checkOutLat': current?.lat,
@@ -232,9 +292,34 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         'totalHours': double.parse(hours.toStringAsFixed(2)),
       }, SetOptions(merge: true));
 
+      // --- تحديث ساعات الشهر ---
+      final monthDocId = DateFormat('yyyy-MM').format(now);
+      final monthlyRef = _db
+          .collection('monthlyHours')
+          .doc('${monthDocId}_$uid'); // ← دمج الشهر مع uid
+
+      // جلب الساعات الحالية للموظف
+      final monthSnap = await monthlyRef.get();
+      double currentMonthHours = 0;
+
+      if (monthSnap.exists) {
+        currentMonthHours =
+            (monthSnap.data()?['totalMonthHours'] as num).toDouble();
+      }
+
+      final newMonthHours = currentMonthHours + hours;
+
+      // تحديث بيانات الشهر لموظف محدد
+      await monthlyRef.set({
+        'companyCode': companyCode,
+        'emailEmployee': uid,
+        'totalMonthHours': double.parse(newMonthHours.toStringAsFixed(2)),
+      }, SetOptions(merge: true));
+
       await loadToday(uid: uid);
     } catch (e) {
       emit(AttendanceError(e.toString()));
     }
   }
+
 }

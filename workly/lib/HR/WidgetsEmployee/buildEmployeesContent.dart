@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_flutter/HR/EmployeeCubit/employeescubit.dart';
 import 'package:projects_flutter/HR/EmployeeCubit/employeesstate.dart';
-import 'package:projects_flutter/HR/Widgets/buildEmptyState.dart';
-import 'package:projects_flutter/HR/Widgets/buildErrorState.dart';
-import 'package:projects_flutter/HR/Widgets/buildListView.dart';
-import 'package:projects_flutter/HR/Widgets/buildLoadingState.dart';
-import 'package:projects_flutter/HR/Widgets/buildStatsHeader.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildEmptyState.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildErrorState.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildListView.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildLoadingState.dart';
+import 'package:projects_flutter/HR/WidgetsEmployee/buildStatsHeader.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart'; // للترجمة
 
 Widget buildEmployeesContent({
@@ -16,7 +16,6 @@ Widget buildEmployeesContent({
   required String selectedFilter,
 }) {
   final loc = AppLocalizations.of(context)!; // اختصار للترجمة
-
   return BlocBuilder<EmployeesCubit, EmployeesState>(
     builder: (context, state) {
       if (state is EmployeesLoading) {
