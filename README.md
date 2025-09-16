@@ -1,59 +1,68 @@
-# Workly
+<h1 align="center">🚀 Workly</h1>
+<p align="center">
+  <b>Employee Management System – Web & Mobile</b>  
+</p>
 
-**Workly** is a project for managing employees and daily work, available as a **mobile app** and **web app**. It aims to simplify employee attendance tracking, salary management, and detailed reporting in an easy and smooth way.
-
----
-
-## Features
-
-- Employee login and profile display.
-- Attendance management and working hours calculation.
-- Automatic monthly salary release.
-- Attendance and salary reports for each employee.
-- Easy-to-use interface for both web and mobile.
-- Multi-language support (expandable).
-- Notifications and alerts when salaries are released or status is updated.
 
 ---
 
-## Technologies Used
+## 📖 Overview
+**Workly** is a **cross-platform solution** I built to simplify **employee and work management** for companies.  
+It provides both a **Flutter mobile app** and a **Flutter web application**, connected to **Firebase** for **real-time data synchronization, secure authentication, and cloud storage**.  
 
+---
+
+## ✨ Features
+- 👤 Employee login & profile management  
+- 🕒 Attendance tracking & working hours calculation  
+- 💸 Automatic monthly salary release  
+- 📊 Detailed salary & attendance reports  
+- 🌐 Multi-language support (Arabic & English)  
+- 🔔 Notifications for salary release and updates  
+
+---
+
+## 🛠️ Tech Stack
 ### Mobile
-- **Framework:** Flutter
-- **State Management:** BLoC / Cubit
-- **Backend:** Firebase Firestore & Firebase Auth
-- **Localization:** `flutter_localizations`
-- **Key Packages:**
-  - `geolocator` for location tracking
-  - `month_picker_dialog` for selecting months
-  - `firebase_storage` for image management
-  - `auto_route` for navigation between screens
+- Flutter (BLoC / Cubit, auto_route, localization)  
+- Firebase (Firestore, Auth, Storage)  
 
 ### Web
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Firebase Firestore & Firebase Auth
-- **Deployment:** Firebase Hosting
+- Flutter Web  
+- Firebase Hosting  
+
+### Backend & Cloud
+- Firebase Firestore  
+- Firebase Authentication  
+- Firebase Storage  
+- Firebase Hosting  
 
 ---
 
-## Project Structure
 
-Workly/
-├── mobile/ # Flutter mobile app
-│ ├── lib/
-│ │ ├── screens/
-│ │ ├── cubits/
-│ │ ├── models/
-│ │ ├── widgets/
-│ │ └── main.dart
-├── web/ # Web app
-│ ├── index.html
-│ ├── styles.css
-│ └── app.js
-└── README.md
+---
 
-1. Make sure [Flutter SDK](https://flutter.dev/docs/get-started/install) and [Android Studio / VSCode] are installed.
-2. Open the project:
+## 🚀 Getting Started
+
+### 📱 Mobile (Flutter)
+1. Install [Flutter SDK](https://flutter.dev/docs/get-started/install)  
+2. Install dependencies:  
    ```bash
    cd mobile
    flutter pub get
+flutter run
+## 💻 Web (Flutter Web)
+flutter config --enable-web
+cd web
+flutter run -d chrome
+
+
+## 👨‍💻 Developer
+
+**Aysar Salameh**  
+
+- 📧 **Email:** [aysarsalameh.dev@gmail.com](mailto:aysarfawaz77@gmail.com)  
+- 💼 **LinkedIn:** [linkedin.com/in/aysarsalameh](https://linkedin.com/in/aysar-fawaz)  
+- 🐙 **GitHub:** [github.com/aysarsalameh](https://github.com/AysarSalameh)  
+
+
