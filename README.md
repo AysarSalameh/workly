@@ -53,7 +53,10 @@ It provides both a **Flutter mobile app** and a **Flutter web application**, con
 flutter run
 ## 💻 Web (Flutter Web)
 flutter config --enable-web
+
 cd web
+
+
 flutter run -d chrome
 
 
