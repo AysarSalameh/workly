@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final userEmail = FirebaseAuth.instance.currentUser?.email ?? "";
     final userName = FirebaseAuth.instance.currentUser?.displayName ?? "";
     final userPhoto = FirebaseAuth.instance.currentUser?.photoURL ?? "";
-
     if (emailController.text.isEmpty) emailController.text = userEmail;
     if (nameController.text.isEmpty) nameController.text = userName;
 
@@ -114,16 +114,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundImage: cubit.profileImage != null
                               ? FileImage(cubit.profileImage!)
                               : (userPhoto.isNotEmpty
-                                        ? NetworkImage(userPhoto)
-                                        : null)
-                                    as ImageProvider?,
+                              ? NetworkImage(userPhoto)
+                              : null)
+                          as ImageProvider?,
                           child:
-                              (cubit.profileImage == null && userPhoto.isEmpty)
+                          (cubit.profileImage == null && userPhoto.isEmpty)
                               ? Icon(
-                                  Icons.person,
-                                  size: 60,
-                                  color: theme.iconTheme.color,
-                                )
+                            Icons.person,
+                            size: 60,
+                            color: theme.iconTheme.color,
+                          )
                               : null,
                         ),
                         Container(
@@ -249,12 +249,83 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isDark: Theme.of(context).brightness == Brightness.dark,
                   ),
                   const SizedBox(height: 16),
-                  buildTextField(
-                    controller: companyCodeController,
-                    label: loc.companyCode,
-                    icon: Icons.business,
-                    isDark: Theme.of(context).brightness == Brightness.dark,
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance.collection("companies").snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return Text(loc.errorEnterCode);
+                      }
+
+                      final companies = snapshot.data!.docs.map((doc) {
+                        return {
+                          "code": doc['code'] as String,
+                          "name": doc['name'] as String,
+                          "hrImageUrl": doc['hrImageUrl'] as String?,
+                        };
+                      }).toList();
+
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: DropdownButtonFormField<String>(
+                          isExpanded: true,
+                          value: companyCodeController.text.isNotEmpty
+                              ? companyCodeController.text
+                              : null,
+                          decoration: InputDecoration(
+                            labelText: loc.companyCode,
+                            prefixIcon: const Icon(Icons.business),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          items: companies.map((company) {
+                            return DropdownMenuItem(
+                              value: company["code"],
+                              child: Row(
+                                children: [
+                                  // اللوجو
+                                  if (company["hrImageUrl"] != null &&
+                                      (company["hrImageUrl"] as String).isNotEmpty)
+                                    CircleAvatar(
+                                      radius: 15,
+                                      backgroundImage: NetworkImage(company["hrImageUrl"]!),
+                                      backgroundColor: Colors.transparent,
+                                    )
+                                  else
+                                    const CircleAvatar(
+                                      radius: 15,
+                                      child: Icon(Icons.business, size: 16),
+                                    ),
+                                  const SizedBox(width: 10),
+                                  // الاسم + الكود
+                                  Expanded(
+                                    child: Text(
+                                      "${company["name"]} (${company["code"]})",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              companyCodeController.text = value ?? "";
+                            });
+                          },
+                        ),
+                      );
+                    },
                   ),
+
                   const SizedBox(height: 16),
                   buildTextField(
                     controller: addressController,
@@ -314,49 +385,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 50,
                     child: state is ProfileLoading
                         ? Center(
-                            child: CircularProgressIndicator(
-                              color: theme.colorScheme.primary,
-                            ),
-                          )
+                      child: CircularProgressIndicator(
+                        color: theme.colorScheme.primary,
+                      ),
+                    )
                         : ElevatedButton(
-                            onPressed: () {
-                              if (cubit.idImage == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(loc.uploadId),
-                                    backgroundColor: theme.colorScheme.error,
-                                  ),
-                                );
-                                return;
-                              }
+                      onPressed: () {
+                        if (cubit.idImage == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(loc.uploadId),
+                              backgroundColor: theme.colorScheme.error,
+                            ),
+                          );
+                          return;
+                        }
 
-                              cubit.saveProfile(
-                                name: nameController.text.trim(),
-                                email: userEmail,
-                                birthDate: birthController.text.trim(),
-                                phoneNumer: phoneController.text.trim(),
-                                Id: idNumberController.text.trim(),
-                                companyCode: companyCodeController.text.trim(),
-                                address: addressController.text.trim(),
-                                iban: ibanController.text.trim(),
-                                loc: loc,
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green, // لون الخلفية
-                              foregroundColor: Colors.white, // لون النص
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              loc.saveProfile,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                        cubit.saveProfile(
+                          name: nameController.text.trim(),
+                          email: userEmail,
+                          birthDate: birthController.text.trim(),
+                          phoneNumer: phoneController.text.trim(),
+                          Id: idNumberController.text.trim(),
+                          companyCode: companyCodeController.text.trim(),
+                          address: addressController.text.trim(),
+                          iban: ibanController.text.trim(),
+                          loc: loc,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green, // لون الخلفية
+                        foregroundColor: Colors.white, // لون النص
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        loc.saveProfile,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 20),
@@ -369,3 +440,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+

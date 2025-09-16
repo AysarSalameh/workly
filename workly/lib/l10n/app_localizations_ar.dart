@@ -887,4 +887,65 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get salaryPreview => 'معاينة إصدار الرواتب';
+
+  @override
+  String get pdfExportError => 'خطأ في تصدير PDF';
+
+  @override
+  String get unregisteredEmployee => 'موظف غير مسجل';
+
+  @override
+  String get salarySlip => 'كشف راتب';
+
+  @override
+  String get employeeInfo => 'بيانات الموظف';
+
+  @override
+  String get salaryDetails => 'تفاصيل الراتب';
+
+  @override
+  String get totalMonthHours => 'عدد الساعات المحسوبة';
+
+  @override
+  String get hourlyRate => 'أجر الساعة الواحدة';
+
+  @override
+  String get totalSalary => 'إجمالي الراتب';
+
+  @override
+  String get releaseDate => 'تاريخ الإصدار';
+
+  @override
+  String get pdfNote =>
+      '• هذا الكشف صالح للاستخدام الرسمي تم إنتاجه آلياً من النظام للاستفسارات يرجى التواصل مع قسم الموارد البشرية';
+
+  @override
+  String get generatedOn => 'تم الإنتاج في';
+
+  @override
+  String get invalidDate => 'تاريخ غير صحيح';
+
+  @override
+  String get exportAllSalaries => 'تصدير كل الرواتب PDF ';
+
+  @override
+  String get salariesIndexTitle => 'فهرس الرواتب';
+
+  @override
+  String get index => 'م';
+
+  @override
+  String get page => 'الصفحة';
+
+  @override
+  String get webOnlyFeature => 'هذه الخاصية تعمل على Web فقط!';
+
+  @override
+  String get exportedSuccessfully => 'تم تصدير  راتب بنجاح!';
+
+  @override
+  String get pageOf => 'من';
+
+  @override
+  String get someSalariesAlreadyPaid => 'تم دفع الراتب مسبقًا للموظفين';
 }

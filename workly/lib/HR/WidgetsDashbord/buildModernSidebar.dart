@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects_flutter/HR/SalaryCubit/SalaryCubit.dart';
 import 'package:projects_flutter/HR/company/hrcompanycubit.dart';
 import 'package:projects_flutter/HR/company/hrcompanystate.dart';
 import 'package:projects_flutter/HR/screen/AttendancePage.dart';
@@ -148,9 +149,13 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => SalaryPage(), // استبدل بـصفحتك الحقيقية
+                                  builder: (_) => BlocProvider(
+                                    create: (_) => SalaryCubit(),
+                                    child: const SalaryPage(),
+                                  ),
                                 ),
                               );
+
                             }
                             else if (index == 4) {
                               // Settings

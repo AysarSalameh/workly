@@ -56,6 +56,7 @@ class _BottomActionsWidgetState extends State<BottomActionsWidget> {
                   ],
                 ),
                 child: ExportAllPdfSalaries(
+                  loc: loc,
                   employees: widget.approvedEmployees,
                   salaries: widget.salaries,
                   companyName: companyCode, // Replace with actual company name if available from state
@@ -152,9 +153,6 @@ class _BottomActionsWidgetState extends State<BottomActionsWidget> {
             duration: Duration(seconds: 3),
           ),
         );
-
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {

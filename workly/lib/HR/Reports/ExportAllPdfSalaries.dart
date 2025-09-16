@@ -9,16 +9,17 @@ import 'package:printing/printing.dart';
 import 'package:projects_flutter/HR/ModelsHR/Employee.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' show PdfGoogleFonts;
+import 'package:projects_flutter/l10n/app_localizations.dart';
 
 // conditional import
-import 'export_pdf_stub.dart'
-if (dart.library.html) 'export_pdf_web.dart';
+import 'export_pdf_stub.dart' if (dart.library.html) 'export_pdf_web.dart';
 
 class ExportAllPdfSalaries extends StatelessWidget {
   final List<Employee> employees;
   final List<dynamic> salaries;
   final String companyName;
   final String companyLogoUrl;
+  final AppLocalizations loc;
 
   const ExportAllPdfSalaries({
     super.key,
@@ -26,11 +27,12 @@ class ExportAllPdfSalaries extends StatelessWidget {
     required this.salaries,
     required this.companyName,
     required this.companyLogoUrl,
+    required this.loc,
   });
 
   Future<void> generatePdf(BuildContext context) async {
     if (!kIsWeb) {
-      _showSnackBar(context, 'هذه الخاصية تعمل على Web فقط!', isError: true);
+      _showSnackBar(context, loc.webOnlyFeature, isError: true);
       return;
     }
 
@@ -57,26 +59,32 @@ class ExportAllPdfSalaries extends StatelessWidget {
         final empSalary = salaries[i];
         final employee = _findEmployeeByEmail(empSalary.email);
 
-        pdf.addPage(_buildSalaryPage(
-          employee: employee,
-          empSalary: empSalary,
-          ttf: ttf,
-          ttfBold: ttfBold,
-          ttfLight: ttfLight,
-          logoBytes: logoBytes,
-          pageNumber: i + 1,
-          totalPages: salaries.length,
-        ));
+        pdf.addPage(
+          _buildSalaryPage(
+            employee: employee,
+            empSalary: empSalary,
+            ttf: ttf,
+            ttfBold: ttfBold,
+            ttfLight: ttfLight,
+            logoBytes: logoBytes,
+            pageNumber: i + 1,
+            totalPages: salaries.length,
+          ),
+        );
       }
 
       final bytes = await pdf.save();
       Navigator.of(context).pop(); // إغلاق مؤشر التحميل
 
       downloadPdfWeb(bytes, "All-Salaries-${_getCurrentDateString()}.pdf");
-      _showSnackBar(context, 'تم تصدير ${salaries.length} راتب بنجاح!');
+      _showSnackBar(context, loc.exportedSuccessfully);
     } catch (e) {
       Navigator.of(context).pop();
-      _showSnackBar(context, 'خطأ في تصدير PDF: ${e.toString()}', isError: true);
+      _showSnackBar(
+        context,
+        '${loc.pdfExportError}: ${e.toString()}',
+        isError: true,
+      );
     }
   }
 
@@ -88,23 +96,23 @@ class ExportAllPdfSalaries extends StatelessWidget {
         return response.bodyBytes;
       }
     } catch (e) {
-      debugPrint('خطأ في تحميل اللوجو: $e');
+      debugPrint('Error loading company logo: $e');
     }
     return null;
   }
 
   Employee _findEmployeeByEmail(String email) {
     return employees.firstWhere(
-          (e) => e.email == email,
+      (e) => e.email == email,
       orElse: () => Employee(
-        id: 'غير محدد',
-        name: 'موظف غير مسجل',
+        id: loc.notAvailable,
+        name: loc.unregisteredEmployee,
         email: email,
-        phoneNumber: 'غير محدد',
-        iban: 'غير محدد',
-        address: 'غير محدد',
-        birthDate: 'غير محدد',
-        hrStatus: 'غير محدد',
+        phoneNumber: loc.notAvailable,
+        iban: loc.notAvailable,
+        address: loc.notAvailable,
+        birthDate: loc.notAvailable,
+        hrStatus: loc.notAvailable,
         profileImage: '',
         companyCode: '',
         companyLat: 0,
@@ -128,7 +136,10 @@ class ExportAllPdfSalaries extends StatelessWidget {
           children: [
             _buildHeader(ttfBold, logoBytes),
             pw.SizedBox(height: 30),
-            pw.Text('فهرس الرواتب', style: pw.TextStyle(font: ttfBold, fontSize: 24)),
+            pw.Text(
+              loc.salariesIndexTitle,
+              style: pw.TextStyle(font: ttfBold, fontSize: 24),
+            ),
             pw.SizedBox(height: 20),
             pw.Table(
               border: pw.TableBorder.all(color: PdfColors.grey300),
@@ -142,10 +153,10 @@ class ExportAllPdfSalaries extends StatelessWidget {
                 pw.TableRow(
                   decoration: const pw.BoxDecoration(color: PdfColors.grey200),
                   children: [
-                    _buildTableCell('م', ttfBold, isHeader: true),
-                    _buildTableCell('اسم الموظف', ttfBold, isHeader: true),
-                    _buildTableCell('الراتب', ttfBold, isHeader: true),
-                    _buildTableCell('الصفحة', ttfBold, isHeader: true),
+                    _buildTableCell(loc.index, ttfBold, isHeader: true),
+                    _buildTableCell(loc.employeeName, ttfBold, isHeader: true),
+                    _buildTableCell(loc.salary, ttfBold, isHeader: true),
+                    _buildTableCell(loc.page, ttfBold, isHeader: true),
                   ],
                 ),
                 ...salaries.asMap().entries.map((entry) {
@@ -156,7 +167,10 @@ class ExportAllPdfSalaries extends StatelessWidget {
                     children: [
                       _buildTableCell('${index + 1}', ttf),
                       _buildTableCell(employee.name, ttf),
-                      _buildTableCell('${empSalary.salary.toStringAsFixed(2)} ر.س', ttf),
+                      _buildTableCell(
+                        '${empSalary.salary.toStringAsFixed(2)} ر.س',
+                        ttf,
+                      ),
                       _buildTableCell('${index + 2}', ttf),
                     ],
                   );
@@ -179,7 +193,10 @@ class ExportAllPdfSalaries extends StatelessWidget {
     required int pageNumber,
     required int totalPages,
   }) {
-    String releaseDateStr = _formatReleaseDate(empSalary.releaseDate);
+    String releaseDateStr = empSalary.releaseDate != null
+        ? _formatReleaseDate(empSalary.releaseDate)
+        : _formatReleaseDate(Timestamp.now());
+
 
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
@@ -193,11 +210,18 @@ class ExportAllPdfSalaries extends StatelessWidget {
             pw.SizedBox(height: 30),
             pw.Center(
               child: pw.Container(
-                padding: const pw.EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const pw.EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
                 decoration: pw.BoxDecoration(color: PdfColors.blue50),
                 child: pw.Text(
-                  'كشف راتب',
-                  style: pw.TextStyle(font: ttfBold, fontSize: 20, color: PdfColors.blue800),
+                  loc.salarySlip,
+                  style: pw.TextStyle(
+                    font: ttfBold,
+                    fontSize: 20,
+                    color: PdfColors.blue800,
+                  ),
                 ),
               ),
             ),
@@ -205,6 +229,7 @@ class ExportAllPdfSalaries extends StatelessWidget {
             _buildEmployeeInfoSection(employee, ttf, ttfBold),
             pw.SizedBox(height: 20),
             _buildSalaryInfoSection(empSalary, releaseDateStr, ttf, ttfBold),
+            pw.SizedBox(height: 20),
             _buildAdditionalDetails(empSalary, ttf, ttfLight),
             pw.Spacer(),
             _buildFooter(ttf, ttfLight, pageNumber, totalPages),
@@ -222,9 +247,23 @@ class ExportAllPdfSalaries extends StatelessWidget {
         pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text(companyName, style: pw.TextStyle(font: ttfBold, fontSize: 18, color: PdfColors.blue800)),
+            pw.Text(
+              companyName,
+              style: pw.TextStyle(
+                font: ttfBold,
+                fontSize: 18,
+                color: PdfColors.blue800,
+              ),
+            ),
             pw.SizedBox(height: 5),
-            pw.Text('تاريخ الإصدار: ${_getCurrentDateString()}', style: pw.TextStyle(font: ttfBold, fontSize: 10, color: PdfColors.grey600)),
+            pw.Text(
+              '${loc.generatedOn}: ${_getCurrentDateString()}',
+              style: pw.TextStyle(
+                font: ttfBold,
+                fontSize: 10,
+                color: PdfColors.grey600,
+              ),
+            ),
           ],
         ),
         if (logoBytes != null)
@@ -233,7 +272,11 @@ class ExportAllPdfSalaries extends StatelessWidget {
     );
   }
 
-  pw.Widget _buildEmployeeInfoSection(Employee employee, pw.Font ttf, pw.Font ttfBold) {
+  pw.Widget _buildEmployeeInfoSection(
+    Employee employee,
+    pw.Font ttf,
+    pw.Font ttfBold,
+  ) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(15),
       decoration: pw.BoxDecoration(
@@ -243,19 +286,43 @@ class ExportAllPdfSalaries extends StatelessWidget {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Text('بيانات الموظف', style: pw.TextStyle(font: ttfBold, fontSize: 16, color: PdfColors.blue800)),
+          pw.Text(
+            loc.employeeInfo,
+            style: pw.TextStyle(
+              font: ttfBold,
+              fontSize: 16,
+              color: PdfColors.blue800,
+            ),
+          ),
           pw.SizedBox(height: 10),
-          _buildInfoRow('اسم الموظف:', employee.name, ttf, ttfBold),
-          _buildInfoRow('البريد الإلكتروني:', employee.email, ttf, ttfBold),
-          _buildInfoRow('رقم الهوية:', employee.id, ttf, ttfBold),
-          _buildInfoRow('رقم الهاتف:', employee.phoneNumber.isNotEmpty ? employee.phoneNumber : 'غير محدد', ttf, ttfBold),
-          _buildInfoRow('رقم الآيبان:', employee.iban.isNotEmpty ? employee.iban : 'غير محدد', ttf, ttfBold),
+          _buildInfoRow(loc.employeeName, employee.name, ttf, ttfBold),
+          _buildInfoRow(loc.email, employee.email, ttf, ttfBold),
+          _buildInfoRow(loc.idNumber, employee.id, ttf, ttfBold),
+          _buildInfoRow(
+            loc.phoneNumber,
+            employee.phoneNumber.isNotEmpty
+                ? employee.phoneNumber
+                : loc.notAvailable,
+            ttf,
+            ttfBold,
+          ),
+          _buildInfoRow(
+            loc.iban,
+            employee.iban.isNotEmpty ? employee.iban : loc.notAvailable,
+            ttf,
+            ttfBold,
+          ),
         ],
       ),
     );
   }
 
-  pw.Widget _buildSalaryInfoSection(dynamic empSalary, String releaseDateStr, pw.Font ttf, pw.Font ttfBold) {
+  pw.Widget _buildSalaryInfoSection(
+    dynamic empSalary,
+    String releaseDateStr,
+    pw.Font ttf,
+    pw.Font ttfBold,
+  ) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(15),
       decoration: pw.BoxDecoration(
@@ -265,18 +332,46 @@ class ExportAllPdfSalaries extends StatelessWidget {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Text('تفاصيل الراتب', style: pw.TextStyle(font: ttfBold, fontSize: 16, color: PdfColors.green800)),
+          pw.Text(
+            loc.salaryDetails,
+            style: pw.TextStyle(
+              font: ttfBold,
+              fontSize: 16,
+              color: PdfColors.green800,
+            ),
+          ),
           pw.SizedBox(height: 10),
-          _buildInfoRow('عدد الساعات المحسوبة:', '${empSalary.totalMonthHours} ساعة', ttf, ttfBold),
-          _buildInfoRow('أجر الساعة الواحدة:', '${empSalary.ratePerHour.toStringAsFixed(2)} ر.س', ttf, ttfBold),
-          _buildInfoRow('إجمالي الراتب:', '${empSalary.salary.toStringAsFixed(2)} ر.س', ttf, ttfBold),
-          _buildInfoRow('تاريخ الإصدار:', releaseDateStr, ttf, ttfBold),
+          _buildInfoRow(
+            loc.totalMonthHours,
+            empSalary?.totalMonthHours != null
+                ? '${empSalary.totalMonthHours!.floor()} ${loc.hours} ${((empSalary.totalMonthHours - empSalary.totalMonthHours.floor()) * 60).round()} ${loc.minutes}'
+                : '--',
+            ttf,
+            ttfBold,
+          ),
+          _buildInfoRow(
+            loc.hourlyRate,
+            '${empSalary.ratePerHour.toStringAsFixed(2)}\$',
+            ttf,
+            ttfBold,
+          ),
+          _buildInfoRow(
+            loc.totalSalary,
+            '${empSalary.salary.toStringAsFixed(2)} \$',
+            ttf,
+            ttfBold,
+          ),
+          _buildInfoRow(loc.releaseDate, releaseDateStr, ttf, ttfBold),
         ],
       ),
     );
   }
 
-  pw.Widget _buildAdditionalDetails(dynamic empSalary, pw.Font ttf, pw.Font ttfLight) {
+  pw.Widget _buildAdditionalDetails(
+    dynamic empSalary,
+    pw.Font ttf,
+    pw.Font ttfLight,
+  ) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(15),
       decoration: pw.BoxDecoration(
@@ -284,13 +379,22 @@ class ExportAllPdfSalaries extends StatelessWidget {
         border: pw.Border.all(color: PdfColors.blue200),
       ),
       child: pw.Text(
-        '• هذا الكشف صالح للاستخدام الرسمي\n• تم إنتاجه آلياً من النظام\n• للاستفسارات يرجى التواصل مع قسم الموارد البشرية',
-        style: pw.TextStyle(font: ttfLight, fontSize: 10, color: PdfColors.grey600),
+        loc.pdfNote,
+        style: pw.TextStyle(
+          font: ttfLight,
+          fontSize: 10,
+          color: PdfColors.grey600,
+        ),
       ),
     );
   }
 
-  pw.Widget _buildFooter(pw.Font ttf, pw.Font ttfLight, int pageNumber, int totalPages) {
+  pw.Widget _buildFooter(
+    pw.Font ttf,
+    pw.Font ttfLight,
+    int pageNumber,
+    int totalPages,
+  ) {
     return pw.Column(
       children: [
         pw.Divider(color: PdfColors.grey400),
@@ -298,50 +402,94 @@ class ExportAllPdfSalaries extends StatelessWidget {
         pw.Row(
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
-            pw.Text('تم الإنتاج في: ${_getCurrentDateString()}', style: pw.TextStyle(font: ttfLight, fontSize: 9, color: PdfColors.grey500)),
-            pw.Text('صفحة $pageNumber من $totalPages', style: pw.TextStyle(font: ttf, fontSize: 10, color: PdfColors.grey600)),
+            pw.Text(
+              '${loc.generatedOn}: ${_getCurrentDateString()}',
+              style: pw.TextStyle(
+                font: ttfLight,
+                fontSize: 9,
+                color: PdfColors.grey500,
+              ),
+            ),
+            pw.Text(
+              '${loc.page} $pageNumber ${loc.pageOf} $totalPages',
+              style: pw.TextStyle(
+                font: ttf,
+                fontSize: 10,
+                color: PdfColors.grey600,
+              ),
+            ),
           ],
         ),
       ],
     );
   }
 
-  pw.Widget _buildInfoRow(String label, String value, pw.Font ttf, pw.Font ttfBold) {
+  pw.Widget _buildInfoRow(
+    String label,
+    String value,
+    pw.Font ttf,
+    pw.Font ttfBold,
+  ) {
     return pw.Row(
       children: [
-        pw.Expanded(flex: 2, child: pw.Text(label, style: pw.TextStyle(font: ttfBold, fontSize: 12))),
-        pw.Expanded(flex: 3, child: pw.Text(value, style: pw.TextStyle(font: ttf, fontSize: 12))),
+        pw.Expanded(
+          flex: 2,
+          child: pw.Text(
+            label,
+            style: pw.TextStyle(font: ttfBold, fontSize: 12),
+          ),
+        ),
+        pw.Expanded(
+          flex: 3,
+          child: pw.Text(value, style: pw.TextStyle(font: ttf, fontSize: 12)),
+        ),
       ],
     );
   }
 
-  pw.Widget _buildTableCell(String text, pw.Font font, {bool isHeader = false}) {
+  pw.Widget _buildTableCell(
+    String text,
+    pw.Font font, {
+    bool isHeader = false,
+  }) {
     return pw.Padding(
       padding: const pw.EdgeInsets.all(8),
       child: pw.Text(
         text,
-        style: pw.TextStyle(font: font, fontSize: isHeader ? 12 : 10, color: isHeader ? PdfColors.blue800 : PdfColors.black),
+        style: pw.TextStyle(
+          font: font,
+          fontSize: isHeader ? 12 : 10,
+          color: isHeader ? PdfColors.blue800 : PdfColors.black,
+        ),
         textAlign: pw.TextAlign.center,
       ),
     );
   }
 
   String _formatReleaseDate(dynamic releaseDate) {
-    if (releaseDate == null) return 'غير محدد';
+    if (releaseDate == null) return loc.notAvailable;
     try {
       DateTime date;
-      if (releaseDate is Timestamp) date = releaseDate.toDate();
-      else if (releaseDate is DateTime) date = releaseDate;
-      else return 'غير محدد';
-      return DateFormat('yyyy/MM/dd - EEEE', 'ar').format(date);
+      if (releaseDate is Timestamp)
+        date = releaseDate.toDate();
+      else if (releaseDate is DateTime)
+        date = releaseDate;
+      else
+        return loc.notAvailable;
+      return DateFormat('yyyy/MM/dd - EEEE').format(date);
     } catch (_) {
-      return 'تاريخ غير صحيح';
+      return loc.invalidDate;
     }
   }
 
-  String _getCurrentDateString() => DateFormat('yyyy/MM/dd', 'ar').format(DateTime.now());
+  String _getCurrentDateString() =>
+      DateFormat('yyyy/MM/dd').format(DateTime.now());
 
-  void _showSnackBar(BuildContext context, String message, {bool isError = false}) {
+  void _showSnackBar(
+    BuildContext context,
+    String message, {
+    bool isError = false,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -360,7 +508,7 @@ class ExportAllPdfSalaries extends StatelessWidget {
       onPressed: () => generatePdf(context),
       icon: const Icon(Icons.picture_as_pdf, color: Colors.white, size: 24),
       label: Text(
-        "تصدير كل الرواتب PDF (${salaries.length})",
+        loc.exportAllSalaries,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       style: ElevatedButton.styleFrom(

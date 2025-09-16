@@ -114,7 +114,7 @@ class _SalaryReleasePreviewState extends State<SalaryReleasePreview>
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            DateFormat('MMMM yyyy', loc.localeName)
+                            DateFormat('MMMM yyyy')
                                 .format(widget.month),
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.8),

@@ -47,6 +47,23 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
+
+    // تحميل الرواتب الافتراضية عند فتح الصفحة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSalaries();
+    });
+  }
+
+  void _loadSalaries() {
+    final employeesState = context.read<EmployeesCubit>().state;
+    List<Employee> approvedEmployees = [];
+    if (employeesState is EmployeesLoaded) {
+      approvedEmployees = employeesState.employees
+          .where((e) => e.hrStatus == 'approved')
+          .toList();
+    }
+    final monthDocId = DateFormat('yyyy-MM').format(selectedMonth);
+    context.read<SalaryCubit>().loadSalaries(monthDocId, approvedEmployees);
   }
 
   @override
@@ -65,7 +82,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
     }
   }
 
-  void _onMonthPicked(DateTime picked, List<Employee> approvedEmployees) {
+  void _onMonthPicked(DateTime picked) {
     setState(() {
       selectedMonth = picked;
       selectedEmployees.clear();
@@ -73,8 +90,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
       _animationController.reset();
       _animationController.forward();
     });
-    final monthDocId = DateFormat('yyyy-MM').format(selectedMonth);
-    context.read<SalaryCubit>().loadSalaries(monthDocId, approvedEmployees);
+    _loadSalaries();
   }
 
   @override
@@ -89,220 +105,233 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
           .toList();
     }
 
-    final monthDocId = DateFormat('yyyy-MM').format(selectedMonth);
-
-    return BlocProvider(
-      create: (_) => SalaryCubit()..loadSalaries(monthDocId, approvedEmployees),
-      child: Builder(
-        builder: (context) => Scaffold(
-          backgroundColor: Colors.grey[50],
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                expandedHeight: 180,
-                floating: false,
-                pinned: true,
-                elevation: 0,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.indigo.shade600,
-                          Colors.blue.shade600,
-                          Colors.indigo.shade700,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: 180,
+            floating: false,
+            pinned: true,
+            elevation: 0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.indigo.shade600,
+                      Colors.blue.shade600,
+                      Colors.indigo.shade700,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
                     ),
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.arrow_back_ios_rounded,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        loc.salaryPageTitle,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        DateFormat('MMMM yyyy').format(selectedMonth),
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(0.8),
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: InkWell(
-                                onTap: () async {
-                                  final picked = await showMonthPicker(
-                                    context: context,
-                                    initialDate: selectedMonth,
-                                    firstDate: DateTime(2020),
-                                    lastDate: DateTime(2100),
-                                  );
-                                  if (picked != null)
-                                    _onMonthPicked(picked, approvedEmployees);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        loc.chooseMonth,
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      const Icon(
-                                        Icons.calendar_month_rounded,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
                             Container(
-                              height: 42,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Colors.white.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: TextField(
-                                onChanged: (val) => setState(() => searchQuery = val),
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.search_rounded,
-                                    color: Colors.grey[400],
-                                  ),
-                                  hintText: loc.searchEmployees,
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_back_ios_rounded,
+                                  color: Colors.white,
                                 ),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    loc.salaryPageTitle,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat(
+                                      'MMMM yyyy',
+                                    ).format(selectedMonth),
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: () async {
+                              final picked = await showMonthPicker(
+                                context: context,
+                                initialDate: selectedMonth,
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime(2100),
+                              );
+                              if (picked != null) {
+                                _onMonthPicked(picked);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    loc.chooseMonth,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.calendar_month_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: TextField(
+                            onChanged: (val) =>
+                                setState(() => searchQuery = val),
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                color: Colors.grey[400],
+                              ),
+                              hintText: loc.searchEmployees,
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: BlocBuilder<SalaryCubit, SalaryState>(
-                  builder: (context, state) {
-                    if (state is SalaryLoading) return buildLoadingState(context);
-                    if (state is SalaryError) return ErrorStateWidget(error: state.message);
-                    if (state is SalaryLoaded) {
-                      if (state.salaries.isEmpty) return buildEmptyState(loc);
-                      return _buildSalariesList(state, approvedEmployees, loc);
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-              ),
-            ],
-          ),
-          floatingActionButton: ScaleTransition(
-            scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: _fabAnimationController,
-                curve: Curves.elasticOut,
-              ),
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.indigo.shade600,
-                    Colors.blue.shade600,
-                    Colors.indigo.shade700,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: FloatingActionButton.extended(
-                backgroundColor: Colors.transparent,
-                foregroundColor: Colors.white,
-                onPressed: () {
-                  final currentState = context.read<SalaryCubit>().state;
-                  if (currentState is SalaryLoaded) {
-                    final selected = currentState.salaries
-                        .where((e) => selectedEmployees[e.email] ?? false)
-                        .toList();
-                    if (selected.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SalaryReleasePreview(
-                            salaries: selected,
-                            approvedEmployees: approvedEmployees,
-                            month: selectedMonth,
-                          ),
+          ),
+          SliverToBoxAdapter(
+            child: BlocBuilder<SalaryCubit, SalaryState>(
+              builder: (context, state) {
+                if (state is SalaryLoading) return buildLoadingState(context);
+                if (state is SalaryError) {
+                  return ErrorStateWidget(error: state.message);
+                }
+                if (state is SalaryLoaded) {
+                  if (state.salaries.isEmpty) return buildEmptyState(loc);
+                  return _buildSalariesList(state, approvedEmployees, loc);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: ScaleTransition(
+        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: _fabAnimationController,
+            curve: Curves.elasticOut,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.indigo.shade600,
+                Colors.blue.shade600,
+                Colors.indigo.shade700,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: FloatingActionButton.extended(
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.white,
+              onPressed: () {
+                final currentState = context.read<SalaryCubit>().state;
+                if (currentState is SalaryLoaded) {
+                  final selected = currentState.salaries
+                      .where((e) => selectedEmployees[e.email] ?? false)
+                      .toList();
+                  if (selected.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SalaryReleasePreview(
+                          salaries: selected,
+                          approvedEmployees: approvedEmployees,
+                          month: selectedMonth,
                         ),
-                      );
-                      return;
-                    }
-                  }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(loc.selectAtLeastOneEmployee),
-                      backgroundColor: Colors.red[400],
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
                       ),
+                    ).then((_) {
+                      // بعد رجوع المستخدم من SalaryReleasePreview
+                      Navigator.pop(context); // يعمل Pop للـ SalaryPage نفسها
+                    });
+                    return;
+                  }
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(loc.selectAtLeastOneEmployee),
+                    backgroundColor: Colors.red[400],
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  );
-                },
-                label: Text(loc.release, style: const TextStyle(fontWeight: FontWeight.w600)),
-                icon: const Icon(Icons.send_rounded),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
+                  ),
+                );
+              },
+
+            label: Text(
+              loc.release,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            icon: const Icon(Icons.send_rounded),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
         ),
@@ -312,10 +341,13 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
 
   // تابع لبناء قائمة الرواتب
   Widget _buildSalariesList(
-      SalaryLoaded state, List<Employee> approvedEmployees, AppLocalizations loc) {
+    SalaryLoaded state,
+    List<Employee> approvedEmployees,
+    AppLocalizations loc,
+  ) {
     final filteredSalaries = state.salaries.where((empSalary) {
       final employee = approvedEmployees.firstWhere(
-            (e) => e.email == empSalary.email,
+        (e) => e.email == empSalary.email,
         orElse: () => Employee(
           id: empSalary.email,
           name: empSalary.email,
@@ -350,23 +382,42 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 15, offset: const Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 15,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: CheckboxListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
                 value: selectAll,
                 onChanged: (val) {
                   setState(() {
                     selectAll = val ?? false;
                     for (var emp in filteredSalaries) {
-                      if (!(emp.salaryReleased ?? false)) selectedEmployees[emp.email] = selectAll;
+                      if (!(emp.salaryReleased ?? false)) {
+                        selectedEmployees[emp.email] = selectAll;
+                      }
                     }
                     _updateFabVisibility();
                   });
                 },
-                title: Text(loc.selectAll, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                title: Text(
+                  loc.selectAll,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
                 activeColor: Colors.indigo.shade600,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
 
@@ -396,7 +447,7 @@ class _SalaryPageState extends State<SalaryPage> with TickerProviderStateMixin {
               );
 
               final isChecked = selectedEmployees[empSalary.email] ?? false;
-              final isPaid = empSalary.salaryReleased ?? false;
+              final isPaid = empSalary.salaryReleased ;
 
               return TweenAnimationBuilder<double>(
                 duration: Duration(milliseconds: 300 + (index * 100)),

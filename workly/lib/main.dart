@@ -92,23 +92,22 @@ class MyApp extends StatelessWidget {
                 home: StreamBuilder<User?>(
                   stream: FirebaseAuth.instance.authStateChanges(),
                   builder: (context, snapshot) {
-                    // المستخدم مسجّل دخول
-                    if (snapshot.hasData && snapshot.data != null) {
-                      // إذا ويب، افتح HR Dashboard
-                      if (kIsWeb) {
-                        return const HRMainPage(); // يمكن تغييره حسب Web dashboard
+                    if(kIsWeb){
+                      if (snapshot.hasData && snapshot.data != null) {
+                        // المستخدم مسجل دخول → روح على الـ HR Dashboard
+                        return const HRMainPage();
+                      } else {
+                        // المستخدم غير مسجل دخول → روح على شاشة تسجيل دخول الويب
+                        return const HrLoginScreen();
                       }
-                      else {
-                        return const HomeScreen();
-                      }
-                    } else {
-                      // المستخدم غير مسجّل دخول
-                      return kIsWeb
-                          ? const HrLoginScreen()
-                          : const LoginScreen();
                     }
+                    else{
+                      return const LoginScreen();
+                    }
+
                   },
                 ),
+
               );
             },
           );
