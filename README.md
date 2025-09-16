@@ -62,7 +62,7 @@ flutter run -d chrome
 **Aysar Salameh**  
 
 - 📧 **Email:** [aysarfawaz77@gmail.com](mailto:aysarfawaz77@gmail.com)  
-- 💼 **LinkedIn:** [linkedin.com/in/aysar-fawaz](https://linkedin.com/in/aysar-fawaz)  
+- 💼 **LinkedIn:** [linkedin.com/in/aysar-fawaz](https://linkedin.com/in/aysar-fawaz-a60731274)  
 - 🐙 **GitHub:** [github.com/aysarsalameh](https://github.com/AysarSalameh)  
 
 
