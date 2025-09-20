@@ -9,10 +9,12 @@ import 'package:projects_flutter/HR/screen/EmployeeRatePerHour.dart';
 import 'package:projects_flutter/HR/screen/SalaryReleasePage.dart';
 import 'package:projects_flutter/HR/screen/SettingsPage.dart';
 import 'package:projects_flutter/HR/screen/employeespage.dart';
-import '/l10n/app_localizations.dart'; // 👈 إضافة Localization
+import '/l10n/app_localizations.dart';
 
 class BuildModernSidebar extends StatefulWidget {
-  const BuildModernSidebar({super.key});
+  const BuildModernSidebar({super.key, this.isDrawer = false});
+
+  final bool isDrawer; // لو true => Sidebar كـ Drawer
 
   @override
   State<BuildModernSidebar> createState() => _BuildModernSidebarState();
@@ -23,7 +25,7 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!; // 👈 اختصار للوصول للنصوص
+    final loc = AppLocalizations.of(context)!;
 
     final List<MenuItem> _menuItems = [
       MenuItem(loc.myEmployees, Icons.people_rounded),
@@ -33,7 +35,7 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
       MenuItem(loc.settings, Icons.settings_rounded),
     ];
 
-    return BlocBuilder<HrCompanyCubit, HrCompanyState>(
+    Widget sidebarContent = BlocBuilder<HrCompanyCubit, HrCompanyState>(
       builder: (context, state) {
         String companyCode = '';
         if (state is CompanyLoaded) companyCode = state.code;
@@ -59,7 +61,7 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
           ),
           child: Column(
             children: [
-              // ---- Header ----
+              // Header
               Container(
                 padding: const EdgeInsets.all(32),
                 child: Row(
@@ -99,7 +101,7 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
                 ),
               ),
 
-              // ---- Menu ----
+              // Menu
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -117,35 +119,35 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
                           borderRadius: BorderRadius.circular(16),
                           onTap: () {
                             setState(() => _selectedIndex = index);
+                            if (widget.isDrawer) Navigator.pop(context); // يغلق drawer بعد الضغط
 
                             if (index == 0 && companyCode.isNotEmpty) {
-                              // MyEmployees
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => EmployeesPage(companyCode: companyCode),
+                                  builder: (_) =>
+                                      EmployeesPage(companyCode: companyCode),
                                 ),
                               );
-                            }
-                            else if (index == 1) {
-                              // Settings
+                            } else if (index == 1) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => AttendancePage(companyCode: companyCode,), // استبدل بـصفحتك الحقيقية
+                                  builder: (_) => AttendancePage(
+                                    companyCode: companyCode,
+                                  ),
                                 ),
                               );
-                            }
-                            else if (index == 2) {
-                              // Settings
+                            } else if (index == 2) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => EmployeeRatePerHour(companyCode: companyCode,), // استبدل بـصفحتك الحقيقية
+                                  builder: (_) => EmployeeRatePerHour(
+                                    companyCode: companyCode,
+                                  ),
                                 ),
                               );
-                            }
-                            else if (index == 3) {
+                            } else if (index == 3) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -155,19 +157,15 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
                                   ),
                                 ),
                               );
-
-                            }
-                            else if (index == 4) {
-                              // Settings
+                            } else if (index == 4) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => SettingsPage(), // استبدل بـصفحتك الحقيقية
+                                  builder: (_) => SettingsPage(),
                                 ),
                               );
                             }
                           },
-
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 16),
@@ -214,7 +212,7 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
                 ),
               ),
 
-              // ---- User Info ----
+              // User Info
               Container(
                 margin: const EdgeInsets.all(16),
                 padding: const EdgeInsets.all(16),
@@ -272,6 +270,12 @@ class _BuildModernSidebarState extends State<BuildModernSidebar> {
         );
       },
     );
+
+    if (widget.isDrawer) {
+      return Drawer(child: sidebarContent);
+    } else {
+      return sidebarContent;
+    }
   }
 }
 
