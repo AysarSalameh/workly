@@ -737,7 +737,7 @@ abstract class AppLocalizations {
   /// No description provided for @emailAddress.
   ///
   /// In en, this message translates to:
-  /// **'support@example.com'**
+  /// **'support@gmail.com'**
   String get emailAddress;
 
   /// No description provided for @callUs.

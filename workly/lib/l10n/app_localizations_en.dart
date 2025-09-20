@@ -339,7 +339,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailUs => 'Email us';
 
   @override
-  String get emailAddress => 'support@example.com';
+  String get emailAddress => 'support@gmail.com';
 
   @override
   String get callUs => 'Call us';

@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1087771326663:android:55b7b174a91910fe3a26e2",
+        "mobilesdk_app_id": "1:1087771326663:android:cd9c184fab3790b93a26e2",
         "android_client_info": {
-          "package_name": "com.example.projects_flutter"
+          "package_name": "com.workly.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1087771326663-7ffboetfi9gi14f2do0as44kht0a2pbk.apps.googleusercontent.com",
+          "client_id": "1087771326663-fsi4qrl3nfnvibuoc6k8ng3rqhmhm78s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.projects_flutter",
+            "package_name": "com.workly.app",
             "certificate_hash": "dd22e1e18617482495a1d4dd275c60ca52ff326f"
           }
         },
@@ -37,6 +37,13 @@
             {
               "client_id": "1087771326663-bcsjpkt99chb74v35saas8u23t2he2pq.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1087771326663-ihno3jj5v0nud425t69m3hbsrc3eed1m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.projectsFlutter"
+              }
             }
           ]
         }

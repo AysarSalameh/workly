@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
+import 'package:flutter/services.dart'; // للClipboard
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpAndSupportScreen extends StatelessWidget {
@@ -48,26 +49,31 @@ class HelpAndSupportScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-          ListTile(
-            leading: const Icon(Icons.email),
-            title: Text(loc.emailUs),
-            subtitle: Text(loc.emailAddress),
-            onTap: () async {
-              final Uri emailUri = Uri(
-                scheme: 'mailto',
-                path: loc.emailAddress,
-                query: 'subject=Support&body=Hello', // اختياري
-              );
-              if (await canLaunchUrl(emailUri)) {
-                await launchUrl(emailUri);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Could not launch email client")),
+            ListTile(
+              leading: const Icon(Icons.email),
+              title: Text(loc.emailUs),
+              subtitle: Text(loc.emailAddress),
+              onTap: () async {
+                final Uri emailUri = Uri(
+                  scheme: 'mailto',
+                  path: loc.emailAddress,
+                  queryParameters: {
+                    'subject': 'Support',
+                    'body': 'Hello',
+                  },
                 );
-              }
-            },
-          ),
 
+                if (await canLaunchUrl(emailUri)) {
+                  await launchUrl(emailUri);
+                } else {
+                  // fallback: نسخ الإيميل للمستخدم
+                  await Clipboard.setData(ClipboardData(text: loc.emailAddress));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Email copied: ${loc.emailAddress}")),
+                  );
+                }
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.phone),
               title: Text(loc.callUs),
@@ -83,7 +89,6 @@ class HelpAndSupportScreen extends StatelessWidget {
                 }
               },
             ),
-
           ],
         ),
       ),

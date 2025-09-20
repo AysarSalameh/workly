@@ -66,7 +66,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'workly-be7bb.firebasestorage.app',
     androidClientId: '1087771326663-7ffboetfi9gi14f2do0as44kht0a2pbk.apps.googleusercontent.com',
     iosClientId: '1087771326663-ihno3jj5v0nud425t69m3hbsrc3eed1m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.projectsFlutter',
+    iosBundleId: 'com.workly.app', // ✅ هنا تم التحديث
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -77,8 +77,9 @@ class DefaultFirebaseOptions {
     storageBucket: 'workly-be7bb.firebasestorage.app',
     androidClientId: '1087771326663-7ffboetfi9gi14f2do0as44kht0a2pbk.apps.googleusercontent.com',
     iosClientId: '1087771326663-ihno3jj5v0nud425t69m3hbsrc3eed1m.apps.googleusercontent.com',
-    iosBundleId: 'com.example.projectsFlutter',
+    iosBundleId: 'com.workly.app', // ✅ هنا كمان
   );
+
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyAaiTwKpp7GBentKvlxaLskFK6W0THEdLc',

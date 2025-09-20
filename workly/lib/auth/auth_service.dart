@@ -51,23 +51,36 @@ class AuthService {
 
   /// إنشاء حساب جديد
   Future<User?> registerWithEmail(String name, String email, String password) async {
-    final credential = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      // إنشاء المستخدم
+      final credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final user = credential.user;
+      final user = credential.user;
 
-    if (user != null) {
-      await user.updateDisplayName(name);
-      if (!user.emailVerified) {
-        await user.sendEmailVerification();
+      if (user != null) {
+        // تحديث اسم المستخدم
+        await user.updateDisplayName(name);
+
+        // إرسال رابط التحقق مباشرة بدون ActionCodeSettings
+        if (!user.emailVerified) {
+          await user.sendEmailVerification();
+        }
+
+        // تسجيل خروج بعد التسجيل
+        await _auth.signOut();
       }
-      await _auth.signOut();
-    }
 
-    return user;
+      return user;
+    } catch (e) {
+      print("حدث خطأ أثناء التسجيل: $e");
+      return null;
+    }
   }
+
+
 
 
   Future<User?> loginWithApple() async {

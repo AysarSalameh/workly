@@ -1,4 +1,4 @@
-package com.example.projects_flutter;
+package com.workly.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 

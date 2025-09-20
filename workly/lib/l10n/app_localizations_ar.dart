@@ -341,7 +341,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emailUs => 'أرسل لنا بريدًا إلكترونيًا';
 
   @override
-  String get emailAddress => 'support@example.com';
+  String get emailAddress => 'support@gmail.com';
 
   @override
   String get callUs => 'اتصل بنا';
