@@ -110,4 +110,41 @@ class HrCompanyCubit extends Cubit<HrCompanyState> {
       emit(HrCompanyFailure(e.toString()));
     }
   }
+
+
+
+
+  /// تحديث الصورة واسم الـ HR فقط
+  Future<void> updateHrData({
+    required String uid,
+    required String hrName,
+    Uint8List? newLogoBytes,
+  }) async {
+    try {
+      emit(HrCompanyLoading());
+
+      String? hrImageUrl;
+
+      // إذا فيه صورة جديدة، نرفعها
+      if (newLogoBytes != null) {
+        logoBytes = newLogoBytes;
+        hrImageUrl = await uploadLogo(uid);
+      }
+
+      // تحديث فقط الحقول المطلوبة
+      final Map<String, dynamic> updateData = {
+        'hrName': hrName,
+      };
+      if (hrImageUrl != null) {
+        updateData['hrImageUrl'] = hrImageUrl;
+      }
+
+      await _firestore.collection('companies').doc(uid).update(updateData);
+
+      emit(HrCompanySuccess("تم تحديث بيانات الـ HR بنجاح"));
+    } catch (e) {
+      emit(HrCompanyFailure("فشل تحديث بيانات الـ HR: $e"));
+    }
+  }
+
 }

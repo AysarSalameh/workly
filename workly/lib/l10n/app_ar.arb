@@ -305,5 +305,7 @@
   "invalidDate": "تاريخ غير صحيح",
   "exportAllSalaries": "تصدير كل الرواتب PDF ",
   "pageOf": "من",
-  "someSalariesAlreadyPaid": "تم دفع الراتب مسبقًا للموظفين"
+  "someSalariesAlreadyPaid": "تم دفع الراتب مسبقًا للموظفين",
+  "editCompany": "تعديل بيانات الشركة",
+  "manageSettings": "إدارة إعدادات الحساب"
 }

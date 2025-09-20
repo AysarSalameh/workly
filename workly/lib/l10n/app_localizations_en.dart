@@ -947,4 +947,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get someSalariesAlreadyPaid => 'Some salaries are already paid';
+
+  @override
+  String get editCompany => 'Edit Information Company';
+
+  @override
+  String get manageSettings => 'Manage Settings';
 }

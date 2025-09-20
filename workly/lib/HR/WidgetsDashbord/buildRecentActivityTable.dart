@@ -86,24 +86,37 @@ class RecentActivityTable extends StatelessWidget {
                             ),
                           ],
                           rows: approvedEmployees.map((emp) {
-                            final isPresent = emp.lastCheckIn != null;
-                            final checkInStr = emp.lastCheckIn != null
-                                ? DateFormat('yyyy-MM-dd – HH:mm')
-                                .format(emp.lastCheckIn!)
-                                : "-";
+                            final now = DateTime.now();
+
+                            // نصّفّر الساعة والدقيقة والثانية عشان نقارن التواريخ بس
+                            final todayDate = DateTime(now.year, now.month, now.day);
+
+                            bool isPresent = false;
+                            String checkInStr = "-";
+
+                            if (emp.lastCheckIn != null) {
+                              final lastCheckInDate = DateTime(
+                                emp.lastCheckIn!.year,
+                                emp.lastCheckIn!.month,
+                                emp.lastCheckIn!.day,
+                              );
+
+                              // إذا التاريخ نفسه
+                              isPresent = lastCheckInDate == todayDate;
+
+                              checkInStr = DateFormat('yyyy-MM-dd – HH:mm')
+                                  .format(emp.lastCheckIn!);
+                            }
 
                             return DataRow(
                               cells: [
-                                DataCell(Text(emp.name,
-                                    overflow: TextOverflow.ellipsis)),
-                                DataCell(Text(isPresent
-                                    ? loc.present
-                                    : loc.absent)),
-                                DataCell(Text(checkInStr,
-                                    overflow: TextOverflow.ellipsis)),
+                                DataCell(Text(emp.name, overflow: TextOverflow.ellipsis)),
+                                DataCell(Text(isPresent ? loc.present : loc.absent)),
+                                DataCell(Text(checkInStr, overflow: TextOverflow.ellipsis)),
                               ],
                             );
                           }).toList(),
+
                         ),
                       ),
                     );

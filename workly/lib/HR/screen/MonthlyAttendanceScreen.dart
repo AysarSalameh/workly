@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projects_flutter/HR/Reports/ExportPdfAttendance.dart';
@@ -112,13 +114,14 @@ class _MonthlyAttendanceScreenState extends State<MonthlyAttendanceScreen> {
                 }
 
                 final days = snapshot.data ?? [];
-
+                print(convertDaysToJson(days));
                 if (days.isEmpty) {
                   return EmptyStateWidget();
                 }
 
                 // حساب الإحصائيات
-                final statistics = _calculateStatistics(days);
+                final statistics = _calculateStatistics(days, selectedMonth, selectedYear);
+
 
                 return Column(
                   children: [
@@ -141,7 +144,10 @@ class _MonthlyAttendanceScreenState extends State<MonthlyAttendanceScreen> {
                               companyName: state.name,
                               companyLogoUrl: state.hrImageUrl,
                               attendance: days,
+                              month: selectedMonth, // الشهر الحالي المحدد
+                              year: selectedYear,   // السنة الحالية المحددة
                             ),
+
                           );
                         }
                         return const SizedBox.shrink();
@@ -161,9 +167,9 @@ class _MonthlyAttendanceScreenState extends State<MonthlyAttendanceScreen> {
     );
   }
 
-  Map<String, dynamic> _calculateStatistics(List<Map<String, dynamic>> days) {
+  Map<String, dynamic> _calculateStatistics(List<Map<String, dynamic>> days, int month, int year) {
+    final daysInMonth = DateTime(year, month + 1, 0).day;
     int presentDays = 0;
-    int absentDays = 0;
     double totalHours = 0;
 
     for (var day in days) {
@@ -172,10 +178,10 @@ class _MonthlyAttendanceScreenState extends State<MonthlyAttendanceScreen> {
         if (day['totalHours'] != null) {
           totalHours += (day['totalHours'] as num).toDouble();
         }
-      } else {
-        absentDays++;
       }
     }
+
+    int absentDays = daysInMonth - presentDays;
 
     return {
       'presentDays': presentDays,
@@ -183,6 +189,7 @@ class _MonthlyAttendanceScreenState extends State<MonthlyAttendanceScreen> {
       'totalHours': totalHours,
     };
   }
+
 }
 
 Future<List<Map<String, dynamic>>> getMonthlyAttendance(
@@ -202,4 +209,18 @@ Future<List<Map<String, dynamic>>> getMonthlyAttendance(
       .get();
 
   return snapshot.docs.map((doc) => doc.data()).toList();
+}
+
+String convertDaysToJson(List<Map<String, dynamic>> days) {
+  final converted = days.map((day) {
+    return day.map((key, value) {
+      if (value is Timestamp) {
+        // تحويل Timestamp إلى ISO String
+        return MapEntry(key, value.toDate().toIso8601String());
+      }
+      return MapEntry(key, value);
+    });
+  }).toList();
+
+  return jsonEncode(converted);
 }

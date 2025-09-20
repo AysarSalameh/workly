@@ -127,23 +127,45 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthInitial());
   }
 
-  Future<String> checkProfileCompletionByEmail(String email) async {
-    print("enter");
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('Employee')
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
+  Future<void> checkProfileCompletionByEmail(String email) async {
+    emit(AuthLoading());
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('Employee')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
 
-    if (querySnapshot.docs.isEmpty) return "incomplete";
+      if (querySnapshot.docs.isEmpty) {
+        emit(ProfileStatusIncomplete());
+        return;
+      }
 
-    final data = querySnapshot.docs.first.data();
-    final isComplete = data['name'] != null &&
-        data['birthDate'] != null &&
-        data['Id'] != null &&
-        data['phoneNumber'] != null;
+      final data = querySnapshot.docs.first.data();
+      final isComplete = data['name'] != null &&
+          data['birthDate'] != null &&
+          data['Id'] != null &&
+          data['phoneNumber'] != null;
 
-    if (!isComplete) return "incomplete";
-    return data['hrStatus'] ?? "pending";
+      if (!isComplete) {
+        emit(ProfileStatusIncomplete());
+        return;
+      }
+
+      final hrStatus = (data['hrStatus'] ?? "pending").toLowerCase();
+
+      if (hrStatus == "approved") {
+        emit(ProfileStatusApproved());
+      } else if (hrStatus == "pending") {
+        emit(ProfileStatusPending());
+      } else {
+        // أي حالة أخرى تعتبر مرفوضة
+        emit(ProfileStatusRejected()); // بدل ProfileStatusDeleted
+      }
+    } catch (e) {
+      emit(ProfileStatusError(e.toString()));
+    }
   }
+
+
 }

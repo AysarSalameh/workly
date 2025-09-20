@@ -26,11 +26,27 @@ class _AttendancePageState extends State<AttendancePage> {
   FilterStatus filterStatus = FilterStatus.all;
 
   List<Employee> _filterEmployees(List<Employee> employees) {
+    final now = DateTime.now();
+    final todayDate = DateTime(now.year, now.month, now.day);
+
     return employees.where((emp) {
-      final nameMatch = emp.name.toLowerCase().contains(searchQuery.toLowerCase());
+      final nameMatch =
+      emp.name.toLowerCase().contains(searchQuery.toLowerCase());
+
+      // تحديد إذا حاضر بناءً على تاريخ اليوم
+      bool isPresent = false;
+      if (emp.lastCheckIn != null) {
+        final lastCheckInDate = DateTime(
+          emp.lastCheckIn!.year,
+          emp.lastCheckIn!.month,
+          emp.lastCheckIn!.day,
+        );
+        isPresent = lastCheckInDate == todayDate;
+      }
+
       final statusMatch = filterStatus == FilterStatus.all ||
-          (filterStatus == FilterStatus.present && emp.lastCheckIn != null) ||
-          (filterStatus == FilterStatus.absent && emp.lastCheckIn == null);
+          (filterStatus == FilterStatus.present && isPresent) ||
+          (filterStatus == FilterStatus.absent && !isPresent);
 
       // شرط إضافي: فقط الموظفين المعتمدين
       final approvedMatch = emp.hrStatus?.toLowerCase() == 'approved';
@@ -38,7 +54,6 @@ class _AttendancePageState extends State<AttendancePage> {
       return nameMatch && statusMatch && approvedMatch;
     }).toList();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +66,29 @@ class _AttendancePageState extends State<AttendancePage> {
           if (state is EmployeesLoading) {
             return buildLoadingState(context);
           } else if (state is EmployeesError) {
-            return buildErrorState(context, widget.companyCode, state.message, loc);
+            return buildErrorState(
+                context, widget.companyCode, state.message, loc);
           } else if (state is EmployeesLoaded) {
             final employees = _filterEmployees(state.employees);
-            final presentCount = employees.where((e) => e.lastCheckIn != null).length;
+
+            // حساب الإحصائيات بناءً على اليوم
+            final now = DateTime.now();
+            final todayDate = DateTime(now.year, now.month, now.day);
+
+            int presentCount = 0;
+            for (var e in employees) {
+              if (e.lastCheckIn != null) {
+                final lastCheckInDate = DateTime(
+                  e.lastCheckIn!.year,
+                  e.lastCheckIn!.month,
+                  e.lastCheckIn!.day,
+                );
+                if (lastCheckInDate == todayDate) {
+                  presentCount++;
+                }
+              }
+            }
+
             final absentCount = employees.length - presentCount;
 
             return CustomScrollView(
@@ -85,8 +119,10 @@ class _AttendancePageState extends State<AttendancePage> {
                       child: AttendanceHeader(
                         searchQuery: searchQuery,
                         filterStatus: filterStatus,
-                        onSearchChanged: (query) => setState(() => searchQuery = query),
-                        onFilterChanged: (filter) => setState(() => filterStatus = filter),
+                        onSearchChanged: (query) =>
+                            setState(() => searchQuery = query),
+                        onFilterChanged: (filter) =>
+                            setState(() => filterStatus = filter),
                         loc: loc,
                       ),
                     ),
@@ -96,14 +132,17 @@ class _AttendancePageState extends State<AttendancePage> {
                 // Stats Header
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    child: buildStatsHeader(presentCount, absentCount, employees.length, loc),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 16),
+                    child: buildStatsHeader(
+                        presentCount, absentCount, employees.length, loc),
                   ),
                 ),
 
                 // Employee Cards
                 SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24, vertical: 16),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                           (context, index) {

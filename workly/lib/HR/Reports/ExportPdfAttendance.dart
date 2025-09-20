@@ -20,6 +20,8 @@ class ExportPdfAttendance extends StatelessWidget {
   final String companyName;
   final String companyLogoUrl;
   final List<Map<String, dynamic>> attendance;
+  final int month;
+  final int year;
 
   const ExportPdfAttendance({
     super.key,
@@ -29,6 +31,8 @@ class ExportPdfAttendance extends StatelessWidget {
     required this.companyName,
     required this.companyLogoUrl,
     required this.attendance,
+    required this.month,
+    required this.year,
   });
 
   String formatHours(num? total, bool isArabic) {
@@ -63,24 +67,18 @@ class ExportPdfAttendance extends StatelessWidget {
     final ttf = await PdfGoogleFonts.cairoRegular();
     final ttfBold = await PdfGoogleFonts.cairoBold();
 
-    // تحميل الصورة من الإنترنت
+    // تحميل صورة الشركة من الإنترنت
     final response = await http.get(Uri.parse(companyLogoUrl));
     final netImage = pw.MemoryImage(response.bodyBytes);
 
-    int presentDays = 0;
-    int absentDays = 0;
-    double totalHours = 0;
-
-    for (var day in attendance) {
-      if (day['checkIn'] != null) {
-        presentDays++;
-        if (day['totalHours'] != null) {
-          totalHours += (day['totalHours'] as num).toDouble();
-        }
-      } else {
-        absentDays++;
-      }
-    }
+    // حساب أيام الشهر
+    int daysInMonth = DateTime(year, month + 1, 0).day;
+    int presentDays = attendance.where((day) => day['checkIn'] != null).length;
+    int absentDays = daysInMonth - presentDays;
+    double totalHours = attendance.fold(
+      0.0,
+          (sum, day) => sum + ((day['totalHours'] ?? 0) as num).toDouble(),
+    );
 
     pdf.addPage(
       pw.MultiPage(
@@ -89,46 +87,35 @@ class ExportPdfAttendance extends StatelessWidget {
           pw.Directionality(
             textDirection: isArabic ? pw.TextDirection.rtl : pw.TextDirection.ltr,
             child: pw.Column(
-              crossAxisAlignment: isArabic
-                  ? pw.CrossAxisAlignment.end
-                  : pw.CrossAxisAlignment.start,
+              crossAxisAlignment: isArabic ? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start,
               children: [
+                // Header: شعار الشركة والبيانات
                 pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Column(
-                      crossAxisAlignment: isArabic
-                          ? pw.CrossAxisAlignment.end
-                          : pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: isArabic ? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(companyName,
-                            style: pw.TextStyle(font: ttfBold, fontSize: 18)),
+                        pw.Text(companyName, style: pw.TextStyle(font: ttfBold, fontSize: 18)),
                         pw.SizedBox(height: 4),
-                        pw.Text("${loc.hrName}: $hrName",
-                            style: pw.TextStyle(font: ttf)),
+                        pw.Text("${loc.hrName}: $hrName", style: pw.TextStyle(font: ttf)),
                       ],
                     ),
-                    pw.Container(
-                      width: 60,
-                      height: 60,
-                      child: pw.Image(netImage, fit: pw.BoxFit.contain),
-                    ),
+                    pw.Container(width: 60, height: 60, child: pw.Image(netImage, fit: pw.BoxFit.contain)),
                   ],
                 ),
                 pw.SizedBox(height: 16),
                 pw.Column(
-                  crossAxisAlignment: isArabic
-                      ? pw.CrossAxisAlignment.end
-                      : pw.CrossAxisAlignment.start,
+                  crossAxisAlignment: isArabic ? pw.CrossAxisAlignment.end : pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text("${loc.employeeName}: $empName",
-                        style: pw.TextStyle(font: ttfBold)),
+                    pw.Text("${loc.employeeName}: $empName", style: pw.TextStyle(font: ttfBold)),
                     pw.SizedBox(height: 4),
-                    pw.Text("${loc.email}: $empEmail",
-                        style: pw.TextStyle(font: ttf)),
+                    pw.Text("${loc.email}: $empEmail", style: pw.TextStyle(font: ttf)),
                   ],
                 ),
                 pw.SizedBox(height: 16),
+
+                // Summary Box
                 pw.Container(
                   padding: const pw.EdgeInsets.all(8),
                   decoration: pw.BoxDecoration(
@@ -138,28 +125,23 @@ class ExportPdfAttendance extends StatelessWidget {
                   child: pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                     children: [
-                      summaryBox(ttf, ttfBold, loc.daysPresent,
-                          presentDays.toString(), isArabic),
-                      summaryBox(ttf, ttfBold, loc.daysAbsent,
-                          absentDays.toString(), isArabic,
-                          color: PdfColors.red100),
-                      summaryBox(ttf, ttfBold, loc.totalHours,
-                          formatHours(totalHours, isArabic), isArabic,
-                          color: PdfColors.blue100),
+                      summaryBox(ttf, ttfBold, loc.daysPresent, presentDays.toString(), isArabic),
+                      summaryBox(ttf, ttfBold, loc.daysAbsent, absentDays.toString(), isArabic, color: PdfColors.red100),
+                      summaryBox(ttf, ttfBold, loc.totalHours, formatHours(totalHours, isArabic), isArabic, color: PdfColors.blue100),
                     ],
                   ),
                 ),
                 pw.SizedBox(height: 16),
+
+                // Attendance Table
                 pw.Table.fromTextArray(
                   headers: [loc.date, loc.checkIn, loc.checkOut, loc.totalHours],
                   data: attendance.map((day) {
                     final checkIn = day['checkIn'] != null
-                        ? DateFormat('MMM dd, yyyy – HH:mm')
-                        .format(day['checkIn'].toDate())
+                        ? DateFormat('MMM dd, yyyy – HH:mm').format(day['checkIn'].toDate())
                         : loc.notAvailable;
                     final checkOut = day['checkOut'] != null
-                        ? DateFormat('MMM dd, yyyy – HH:mm')
-                        .format(day['checkOut'].toDate())
+                        ? DateFormat('MMM dd, yyyy – HH:mm').format(day['checkOut'].toDate())
                         : loc.notAvailable;
                     final totalHrs = day['totalHours'] != null
                         ? formatHours(day['totalHours'], isArabic)
@@ -174,9 +156,7 @@ class ExportPdfAttendance extends StatelessWidget {
                   headerStyle: pw.TextStyle(font: ttfBold, fontSize: 12),
                   cellStyle: pw.TextStyle(font: ttf, fontSize: 10),
                   headerDecoration: pw.BoxDecoration(color: PdfColors.grey300),
-                  cellAlignment: isArabic
-                      ? pw.Alignment.centerRight
-                      : pw.Alignment.centerLeft,
+                  cellAlignment: isArabic ? pw.Alignment.centerRight : pw.Alignment.centerLeft,
                   columnWidths: {
                     0: pw.FlexColumnWidth(2),
                     1: pw.FlexColumnWidth(3),
@@ -192,8 +172,6 @@ class ExportPdfAttendance extends StatelessWidget {
     );
 
     final bytes = await pdf.save();
-
-    // تحميل PDF على Web فقط
     downloadPdfWeb(bytes, "$empName-Attendance.pdf");
   }
 
@@ -210,7 +188,8 @@ class ExportPdfAttendance extends StatelessWidget {
 // دالة ملخص الحضور
 pw.Container summaryBox(
     pw.Font ttf, pw.Font ttfBold, String title, String value, bool isArabic,
-    {PdfColor color = PdfColors.green100}) {
+    {PdfColor color = PdfColors.green100}
+    ) {
   return pw.Container(
     padding: const pw.EdgeInsets.symmetric(vertical: 4, horizontal: 8),
     decoration: pw.BoxDecoration(

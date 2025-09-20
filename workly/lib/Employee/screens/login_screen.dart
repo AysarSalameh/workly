@@ -50,37 +50,37 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) async {
           if (state is AuthSuccess) {
-            final user = state.user;
-            final cubit = context.read<AuthCubit>();
-            final status = await cubit.checkProfileCompletionByEmail(user.email!);
-
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!mounted) return;
-
-              if (status == "incomplete") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ProfileScreen()));
-              } else if (status == "approved") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const HomeScreen()));
-              } else if (status == "pending") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const PendingScreen()));
-              } else if (status == "deleted") {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RejectedScreen()));
-              }
-            });
+            // بعد نجاح تسجيل الدخول نتحقق من اكتمال البروفايل
+            context.read<AuthCubit>().checkProfileCompletionByEmail(state.user.email!);
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
                 backgroundColor: Colors.red,
                 duration: const Duration(seconds: 3),
+              ),
+            );
+          } else if (state is ProfileStatusIncomplete) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()));
+          } else if (state is ProfileStatusApproved) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const HomeScreen()));
+          } else if (state is ProfileStatusPending) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const PendingScreen()));
+          } else if (state is ProfileStatusRejected) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const RejectedScreen()));
+          } else if (state is ProfileStatusError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
               ),
             );
           }

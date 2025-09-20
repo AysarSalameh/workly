@@ -307,5 +307,7 @@
   "webOnlyFeature": "This feature works on Web only!",
   "exportedSuccessfully": "Successfully exported salaries!",
   "pageOf": "of",
-  "someSalariesAlreadyPaid": "Some salaries are already paid"
+  "someSalariesAlreadyPaid": "Some salaries are already paid",
+  "editCompany": "Edit Information Company",
+  "manageSettings": "Manage Settings"
 }

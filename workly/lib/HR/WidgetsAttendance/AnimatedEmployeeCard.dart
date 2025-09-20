@@ -22,7 +22,8 @@ class AnimatedEmployeeCard extends StatefulWidget {
   State<AnimatedEmployeeCard> createState() => _AnimatedEmployeeCardState();
 }
 
-class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with SingleTickerProviderStateMixin {
+class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<Offset> _slideAnimation;
   late final Animation<double> _fadeAnimation;
@@ -58,7 +59,21 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
 
   @override
   Widget build(BuildContext context) {
-    final isPresent = widget.emp.lastCheckIn != null;
+    final now = DateTime.now();
+    final todayDate = DateTime(now.year, now.month, now.day);
+
+    bool isPresent = false;
+
+    if (widget.emp.lastCheckIn != null) {
+      final lastCheckInDate = DateTime(
+        widget.emp.lastCheckIn!.year,
+        widget.emp.lastCheckIn!.month,
+        widget.emp.lastCheckIn!.day,
+      );
+
+      isPresent = lastCheckInDate == todayDate;
+    }
+
     final checkInStr = widget.emp.lastCheckIn != null
         ? DateFormat('MMM dd, HH:mm').format(widget.emp.lastCheckIn!)
         : widget.loc.nocheckintoday;
@@ -79,7 +94,6 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
               ),
             );
           },
-
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -94,7 +108,9 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
                 ),
               ],
               border: Border.all(
-                color: isPresent ? Colors.green.withOpacity(0.2) : Colors.red.withOpacity(0.2),
+                color: isPresent
+                    ? Colors.green.withOpacity(0.2)
+                    : Colors.red.withOpacity(0.2),
                 width: 1.5,
               ),
             ),
@@ -114,7 +130,8 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: (isPresent ? Colors.green : Colors.red).withOpacity(0.3),
+                        color: (isPresent ? Colors.green : Colors.red)
+                            .withOpacity(0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 6),
                       ),
@@ -152,7 +169,8 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
                               color: isPresent
                                   ? Colors.green.withOpacity(0.1)
@@ -165,9 +183,13 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
                               ),
                             ),
                             child: Text(
-                              isPresent ? widget.loc.present : widget.loc.absent,
+                              isPresent
+                                  ? widget.loc.present
+                                  : widget.loc.absent,
                               style: TextStyle(
-                                color: isPresent ? Colors.green.shade700 : Colors.red.shade700,
+                                color: isPresent
+                                    ? Colors.green.shade700
+                                    : Colors.red.shade700,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -176,7 +198,9 @@ class _AnimatedEmployeeCardState extends State<AnimatedEmployeeCard> with Single
                         ],
                       ),
                       const SizedBox(height: 12),
-                      buildInfoRow(Icons.business_rounded, "${widget.loc.idNumber} ${widget.emp.companyCode}", Colors.blue),
+                      buildInfoRow(Icons.business_rounded,
+                          "${widget.loc.idNumber} ${widget.emp.companyCode}",
+                          Colors.blue),
                       const SizedBox(height: 6),
                       buildInfoRow(
                         Icons.access_time_rounded,

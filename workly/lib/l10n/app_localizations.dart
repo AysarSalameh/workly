@@ -1939,6 +1939,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Some salaries are already paid'**
   String get someSalariesAlreadyPaid;
+
+  /// No description provided for @editCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Information Company'**
+  String get editCompany;
+
+  /// No description provided for @manageSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Settings'**
+  String get manageSettings;
 }
 
 class _AppLocalizationsDelegate

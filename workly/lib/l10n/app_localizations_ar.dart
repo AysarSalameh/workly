@@ -948,4 +948,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get someSalariesAlreadyPaid => 'تم دفع الراتب مسبقًا للموظفين';
+
+  @override
+  String get editCompany => 'تعديل بيانات الشركة';
+
+  @override
+  String get manageSettings => 'إدارة إعدادات الحساب';
 }

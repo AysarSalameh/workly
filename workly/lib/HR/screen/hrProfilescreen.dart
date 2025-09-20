@@ -8,6 +8,94 @@ import 'package:projects_flutter/HR/company/hrcompanystate.dart';
 import 'package:projects_flutter/HR/screen/hrdashboardscreen.dart';
 import 'package:projects_flutter/l10n/app_localizations.dart';
 
+// AppBar حديث
+class ModernCompanyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onBack;
+
+  const ModernCompanyAppBar({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.onBack,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(120);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 30, 24, 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.indigo.shade600,
+            Colors.blue.shade600,
+            Colors.indigo.shade700,
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Row(
+          children: [
+            if (onBack != null)
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.white,
+                  ),
+                  onPressed: onBack,
+                ),
+              ),
+            if (onBack != null) const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 16,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// HrCompanyScreen مع AppBar حديث وجميع الحقول قابلة للتعديل
 class HrCompanyScreen extends StatefulWidget {
   const HrCompanyScreen({super.key});
 
@@ -90,16 +178,13 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
         builder: (context, state) {
           final cubit = context.read<HrCompanyCubit>();
           final isLoading = state is HrCompanyLoading;
-
-          // هنا نستخدم Uint8List من Cubit للعرض
           final Uint8List? logoBytes = cubit.logoBytes;
 
           return Scaffold(
-            appBar: AppBar(
-              title: Text(loc.companyData),
-              centerTitle: true,
-              backgroundColor: Colors.blue.shade600,
-              foregroundColor: Colors.white,
+            appBar: ModernCompanyAppBar(
+              title: loc.companyData,
+              subtitle: loc.editProfile,
+              onBack: () => Navigator.pop(context),
             ),
             body: Center(
               child: ConstrainedBox(
@@ -113,26 +198,43 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                     child: Column(
                       children: [
                         const SizedBox(height: 20),
-
                         GestureDetector(
                           onTap: () => cubit.pickLogoImage(),
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.grey.shade300,
-                            backgroundImage: logoBytes != null
-                                ? MemoryImage(logoBytes)
-                                : null,
-                            child: logoBytes == null
-                                ? Icon(
-                              Icons.business,
-                              size: 50,
-                              color: Colors.grey.shade700,
-                            )
-                                : null,
+                          child: Stack(
+                            alignment: Alignment.bottomRight,
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.grey.shade300,
+                                backgroundImage: logoBytes != null
+                                    ? MemoryImage(logoBytes)
+                                    : null,
+                                child: logoBytes == null
+                                    ? Icon(
+                                  Icons.business,
+                                  size: 50,
+                                  color: Colors.grey.shade700,
+                                )
+                                    : null,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade600,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white, width: 2),
+                                ),
+                                padding: const EdgeInsets.all(4),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 20),
 
+                        const SizedBox(height: 20),
                         TextFormField(
                           controller: _hrNameController,
                           decoration: InputDecoration(
@@ -149,7 +251,6 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           v == null || v.isEmpty ? loc.enterHrName : null,
                         ),
                         const SizedBox(height: 20),
-
                         TextFormField(
                           initialValue: _companyEmail,
                           readOnly: true,
@@ -165,7 +266,6 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-
                         TextFormField(
                           controller: _companyNameController,
                           decoration: InputDecoration(
@@ -183,10 +283,8 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                               : null,
                         ),
                         const SizedBox(height: 20),
-
                         TextFormField(
                           controller: _companyCodeController,
-                          readOnly: true,
                           decoration: InputDecoration(
                             labelText: loc.companyCode,
                             prefixIcon: Icon(
@@ -198,9 +296,7 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 30),
-
                         SizedBox(
                           height: 55,
                           child: ElevatedButton.icon(
@@ -217,9 +313,8 @@ class _HrCompanyScreenState extends State<HrCompanyScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            onPressed: isLoading
-                                ? null
-                                : () => _onSave(context, logoBytes),
+                            onPressed:
+                            isLoading ? null : () => _onSave(context, logoBytes),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue.shade600,
                               shape: RoundedRectangleBorder(
